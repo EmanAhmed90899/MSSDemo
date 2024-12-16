@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/show_otp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/OTP"
+        android:textSize="@dimen/large_font"
+        android:layout_weight="@integer/material_motion_duration_long_2"
+        android:textColor="@color/black"/>
+     <TextView
+         android:id="@+id/otpText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="@dimen/large_font"
+         android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+
+    <LinearLayout
+        android:id="@+id/copyLayout"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/xl_padding"
+        android:background="@drawable/button_drawable">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/small_padding"
+            android:src="@drawable/copy"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copyOtp"
+            android:textSize="@dimen/small_font"
+            android:textColor="@color/white"
+            android:textFontWeight="@integer/material_motion_duration_long_1"
+            />
+    </LinearLayout>
+
+    <android.widget.Button
+        android:id="@+id/regenerateOtp"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/large_padding"
+        android:background="@drawable/button_fill_drawable"
+        android:text="@string/regenrateOtp"
+        android:textColor="@color/appColor"
+        android:textSize="@dimen/small_font"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/counterTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="00:59 seconds remaining"
+        android:layout_marginTop="@dimen/xl_padding"
+        android:textSize="@dimen/small_font"
+        android:textColor="@color/secondaryColor"/>
+</LinearLayout>
+</RelativeLayout>

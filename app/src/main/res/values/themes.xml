@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MSSDemo" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:fontFamily">@fonWDt/poppins</item>
+    </style>
+    <style name="Theme.MyApp.BottomSheet" parent="Theme.MaterialComponents.DayNight.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:layout_height">800dp</item>
+    </style>
+
+
+
+
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="xSmall_font">13dp</dimen>
+    <dimen name="small_font">14dp</dimen>
+    <dimen name="medium_font">18dp</dimen>
+    <dimen name="large_font">20dp</dimen>
+    <dimen name="xl_font">22dp</dimen>
+    <dimen name="xxl_font">24dp</dimen>
+
+    <dimen name="padding">10dp</dimen>
+    <dimen name="large_padding">20dp</dimen>
+    <dimen name="xl_padding">30dp</dimen>
+    <dimen name="xxl_padding">40dp</dimen>
+    <dimen name="small_padding">3dp</dimen>
+
+</resources>

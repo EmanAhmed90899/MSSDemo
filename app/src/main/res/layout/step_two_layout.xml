@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/padding"
+    android:layout_marginTop="@dimen/large_padding">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/national_idOrPassport"
+        android:textSize="@dimen/small_font"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:id="@+id/et_national_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_padding"
+        android:hint="@string/numberHint"
+        android:singleLine="true"
+        android:nextFocusDown="@id/et_national_id_confirm"
+        android:textColor="@color/textGray"
+        android:background="@drawable/border_grey"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm_national_idOrPassport"
+        android:textSize="@dimen/small_font"
+        android:layout_marginTop="@dimen/large_padding"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:id="@+id/et_national_id_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_padding"
+        android:hint="@string/confirmNumberHint"
+        android:singleLine="true"
+        android:textColor="@color/textGray"
+        android:background="@drawable/border_grey"/>
+
+    <TextView
+        android:id="@+id/errorNationalId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/small_font"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/xxl_padding"
+        android:textColor="@color/red"/>
+
+
+</LinearLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   android:layout_gravity="center"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginRight="@dimen/xl_padding"
+        android:layout_marginLeft="@dimen/xl_padding">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/congratulation"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/congratulations"
+            android:textSize="@dimen/medium_font"
+            android:textColor="@color/secondaryColor"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/congMess"
+            android:textAlignment="center"
+            android:textSize="@dimen/small_font"
+            android:textColor="@color/textGray"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/small_padding"
+            />
+        <LinearLayout
+            android:id="@+id/createPinLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding"
+            android:layout_marginLeft="@dimen/xxl_padding"
+            android:layout_marginRight="@dimen/xxl_padding"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/xl_padding"
+            android:background="@drawable/button_drawable">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="@dimen/large_padding"
+                android:src="@drawable/pin"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/createYourPin"
+                android:textSize="@dimen/xSmall_font"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:textFontWeight="@integer/material_motion_duration_long_1"
+                android:gravity="center"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

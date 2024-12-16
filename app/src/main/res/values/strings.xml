@@ -1,0 +1,193 @@
+<resources>
+    <string name="app_name">MSSDemo</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="terms_and_conditions_text">The customer shall be solely and fully liable for sharing Al Ahly Net/NBE Mobile user ID and passcode with any third party without any liability on the Bank. The customer shall make sure that the mobile phone number and e-mail registered with the Bank are correctly entered.
+
+In case of adding more than one user on the Soft Token, the PIN will be the same for generating an OTP for all users.
+
+The one-time password (OTP) shall be used for different electronic operations/ transactions available on Al Ahly Net/NBE Mobile including transfers, Fawry services, mutual fund certificate purchases, edit customer information, add/edit payee or any other operation/transaction that might be introduced or released subsequently in order to secure the electronic operations/transactions. NBE has the right to send an OTP to the mobile phone number linked to the account or to the e-mail, or by any other means.
+
+Make sure that the OTP is not disclosed to any third party including NBE staff. The customer shall be fully responsible for any loss arising out of disclosing information without any liability on the part of the Bank.
+
+After ticking for acceptance "Terms and Conditions", the customer shall be deemed fully responsible for any operations/ transactions carried out on Al Ahly Net/NBE Mobile using OTP, and the customer may not object to any operation/ transaction carried out using the service.
+
+In case of activating the Soft Token App, the Hard Token will not be deactivated for existing retail customers. If a new customer wishes to activate the Hard Token as well, the customer shall visit the nearest NBE branch to request a new Hard Token.
+
+In case of requesting a new Hard Token, the banking tariffs shall apply.</string>
+    <string name="accept_terms_and_conditions">I accept the Terms and Conditions.</string>
+    <string name="identity_verification">Verify National ID or passport</string>
+    <string name="identity_verification_text">Enter your National ID or passport number to verify your identity.</string>
+    <string name="national_idOrPassport">National ID or passport number</string>
+    <string name="numberHint">Enter number</string>
+    <string name="confirm_national_idOrPassport">Confirm National ID or passport number</string>
+    <string name="confirmNumberHint">Confirm number</string>
+    <string name="next">Next</string>
+    <string name="identity_empty">Please enter the National ID or passport number correctly.</string>
+    <string name="identity_not_match">"National ID/Passport number" and "Confirm National ID/passport number" fields do not match.</string>
+    <string name="identity_not_valid">Identification numbers not valid.</string>
+    <string name="mobile_number">Mobile number</string>
+    <string name="mobile_number_verification">Mobile number verification</string>
+    <string name="mobile_number_verification_text">Please enter your registered mobile number with the bank.</string>
+    <string name="mobile_number_error">Incorrect mobile number.</string>
+    <string name="otp">OTP</string>
+    <string name="otp_text">An OTP has been sent to your registered mobile number.Please ensure that the SIM card of the phone number registered with the bank is on this device.</string>
+    <string name="remaining">An OTP can be sent after</string>
+    <string name="resendOtp">Resend OTP</string>
+    <string name="incorrect_otp">Invalid OTP</string>
+    <string name="soft_token_activation">Soft Token activation</string>
+    <string name="soft_token_activation_text">Login to Al Ahly Net/NBE Mobile and follow the below steps to get the QR code:
+
+\n- Click on the side menu
+\n- Click on Token Services, then Soft Token Services, then Soft Token Activation.
+\n- OTP will be sent to the registered mobile number (Please do not share it with anyone).
+\n- Please accept the terms and conditions and click on Submit. </string>
+    <string name="scan_qr_code">Scan QR code for Soft Token activation</string>
+    <string name="set_pin">Set PIN</string>
+    <string name="set_pin_text">Create a strong 6-digit login passcode.</string>
+
+    <string name="scanActivationData">Scan activation data</string>
+    <string name="generateOTP">Generate OTP</string>
+    <string name="scanned_data_info">Scanned data info</string>
+    <string name="scan_cancelled">Scan cancelled</string>
+    <string name="no_data_decrypt">Sorry no data to decrypt</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="error">Error</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="addUser">Add user</string>
+    <string name="userDetails">User information</string>
+    <string name="manageProtection">manage protection</string>
+    <string name="showAllUsers">Show all users</string>
+    <string name="changeLanguage">Change language</string>
+    <string name="changeLanguageText">Please select your preferred language.</string>
+    <string name="save">Save</string>
+    <string name="invalidActivtionData">Invalid activation data</string>
+    <string name="deleteUser">Delete user</string>
+    <string name="OTPText">OTP</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="deleteUserTitle">Delete User</string>
+    <string name="deleteUserMessage">You are trying to delete this user from the Soft Token. Do you want to proceed?</string>
+    <string name="requestPermission">Permission request</string>
+    <string name="permissionMessage">This app requires access to your camera to provide personalized services. Please grant permission to continue.</string>
+
+    <string name="biometry_status">Biometry status</string>
+    <string name="authentication_result_label">Authentication result:</string>
+    <string name="biometry_supported">Is biometric authentication supported?</string>
+    <string name="biometry_used">Is biometric authentication usable?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="verify_title">Verify user\'s biometry</string>
+    <string name="verify_with_prompt">Verify with prompt</string>
+
+    <!-- Biometric parameters -->
+    <string name="biometric_prompt_title">BiometricSensorSDK Sample</string>
+    <string name="biometric_prompt_subtitle">Authenticate to continue</string>
+    <string name="biometric_prompt_description">This app uses biometric authentication to demonstrate the functionality of BiometricSensorSDK</string>
+    <string name="authentication_failed_text">Biometry not recognized. Try again.</string>
+    <string name="biometric_prompt_button">Abort authentication</string>
+
+    <!-- Scan callback -->
+    <string name="negative_button_called">Negative button called</string>
+    <string name="scan_error">Error during scan: %s</string>
+    <string name="scan_fail">Scan failed: %s</string>
+    <string name="scan_success">Successfully authenticated</string>
+
+    <!-- Error string -->
+    <string name="internal_error">Internal error</string>
+    <string name="prompt_parameter_invalid">One of the prompt parameter is invalid</string>
+    <string name="activity_null">The activity is null</string>
+    <string name="biometric_listener_null">The biometric listener is null</string>
+    <string name="context_null">The context is null</string>
+    <string name="fragment_null">The fragment is null</string>
+    <string name="biometry_not_usable">Biometry is not supported by the device or there is no registered biometric data</string>
+    <string name="permission_denied">Biometry permission was not granted to the application</string>
+    <string name="no_biometry_enrolled">No biometrics were enrolled</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="pinOption">PIN</string>
+    <string name="biometricOption">Biometric</string>
+
+    <string name="RegistrationCode">Registration code</string>
+    <string name="ActivationPassword">Activation password</string>
+
+    <string name="activate">Activate</string>
+    <string name="activation_not_valid">Please enter the activation details correctly.</string>
+    <string name="enter_valid_data">Please enter valid data</string>
+
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+
+    <string name="selectUser">Select User</string>
+    <string name="serialNumber">Serial number</string>
+    <string name="userName">User name</string>
+    <string name="enter_your_pin">Enter PIN</string>
+    <string name="please_enter_6_digit">Please enter 6 digit</string>
+    <string name="loading">Loading...</string>
+
+    <string name="changePin">Change PIN</string>
+    <string name="enter_new_pin">New PIN</string>
+    <string name="enter_old_pin">Current PIN</string>
+    <string name="confirm">Confirm</string>
+
+    <string name="userPasswordChanged">User password changed successfully</string>
+    <string name="userPasswordNotChanged">User password not changed, Something error happened </string>
+
+    <string name="congratulations">Congratulations</string>
+    <string name="createYourPin">Create your PIN</string>
+    <string name="congMess">Your token account has been successfully created.</string>
+    <string name="pin">PIN</string>
+    <string name="pinHint">Enter PIN</string>
+    <string name="confirmPin">Confirm PIN</string>
+    <string name="biometricAuthEnable">Enable \n Biometric Authentication</string>
+    <string name="biometricAuthFailed">failed \n Biometric Authentication</string>
+    <string name="biometricAuthSuccess">Successful \n Biometric Authentication</string>
+    <string name="pinNotSequentialOrRepeatedNumber">The new PIN is not secure because it contains repeated characters. Please use a different PIN.</string>
+    <string name="pinNotMatch">PIN and confirm PIN fields do not match.</string>
+    <string name="welcome">Welcome</string>
+    <string name="generateOtpMess">Carry out your transactions safely.</string>
+    <string name="OTP">OTP</string>
+    <string name="copyOtp">Copy OTP</string>
+    <string name="regenrateOtp">Re-generate OTP</string>
+    <string name="language">Language</string>
+    <string name="biometricAuthentication">Biometric Authentication</string>
+    <string name="changePasscode">Change PIN</string>
+    <string name="resetToken">Online time synchronization</string>
+    <string name="FAQs">FAQs</string>
+    <string name="about">About</string>
+    <string name="FAQsText">Frequently Asked Questions (FAQs)</string>
+    <string name="FAQsTextDescription">The following are some of the frequently asked questions about NBE Soft Token</string>
+    <string name="Que1">Is this service available to both retail and corporate customers?</string>
+    <string name="Ans1">No, it is available only to NBE’s retail customers.</string>
+    <string name="Que2">Can I activate the Soft Token App on a mobile phone with a number other than the one registered with the bank?</string>
+    <string name="Ans2">No, you must ensure that the SIM card of the mobile number registered with the bank is on the same phone used to activate the Soft Token.</string>
+    <string name="Que3">Can the Soft Token and Hard Token be used together in creating an OTP?</string>
+    <string name="Ans3">Yes, the Soft Token and Hard Token with a retail customer User ID can be used together in case you have subscribed to both types of tokens.</string>
+    <string name="aboutTitle">About NBE Soft Token</string>
+    <string name="about_description">NBE\'s Soft Token is a mobile application that enables you to carry out your banking transactions online and via mobile banking through an effective and secure authentication process. The Soft Token generates a one-time password (OTP) for each financial/non-financial transaction online or via mobile banking. You can install the Soft Token App through Google Play/App Store.Please contact us on 19623 for further information or inquiries.</string>
+    <string name="forget">Forget?</string>
+    <string name="copiedOtp">OTP copied</string>
+    <string name="addToken">Add new user</string>
+    <string name="renameUser">Rename user</string>
+    <string name="ok">OK</string>
+    <string name="manualActivation">App activation</string>
+    <string name="manualActivationText">Activate your Soft Token by entering your activation details.</string>
+    <string name="timeShift">Time shift</string>
+    <string name="alais">Alias</string>
+    <string name="detailsTitle">Details eToken</string>
+    <string name="details_eToken">Details about your eToken</string>
+    <string name="activationId">Activation code</string>
+    <string name="activationIdHint">Enter your activation code</string>
+    <string name="activationPassword">Activation password</string>
+    <string name="activationPasswordHint">Enter your activation password</string>
+    <string name="langType">English</string>
+    <string name="enter_new_pin_repeated">Confirm new PIN</string>
+    <string name="pleaseFillAllFields">Please fill all fields</string>
+    <string name="newPinNotMatch">The new PIN and confirm PIN fields do not match.</string>
+    <string name="pinChangedSuccessfully">PIN changed successfully</string>
+    <string name="oldPinandNewPinError">Old PIN and new PIN cannot be the same.</string>
+    <string name="notValidPin">The new PIN is not secure because it contains repeated or sequential characters. Please use a different PIN.</string>
+    <string name="change_pin_description">Change your Soft Token PIN</string>
+    <string name="errorName">Please enter the activation details/scan QR of the user</string>
+    <string name="maunalActiovationButton">Enter activation details for Soft Token activation</string>
+    <string name="renameTitle">What would you like to rename the user:</string>
+</resources>

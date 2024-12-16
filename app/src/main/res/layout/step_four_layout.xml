@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:layout_marginBottom="@dimen/padding"
+    android:layout_marginTop="@dimen/large_padding">
+
+    <LinearLayout
+        android:id="@+id/otpLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/border_grey">
+        <com.hemaya.mssdemo.view.identification.OTPDashedView
+            android:id="@+id/otpDashedView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+    </LinearLayout>
+
+<TextView
+    android:id="@+id/counterTxt"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="@dimen/padding"
+    android:textSize="@dimen/small_font"
+    android:textColor="@color/secondaryColor"/>
+    <TextView
+        android:id="@+id/resendOTP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/resendOtp"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/large_padding"
+        android:textSize="@dimen/small_font"
+        android:textColor="@color/blue"/>
+    <TextView
+        android:id="@+id/errorOTPMess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/incorrect_otp"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/large_padding"
+        android:textSize="@dimen/small_font"
+        android:textColor="@color/red"/>
+</LinearLayout>

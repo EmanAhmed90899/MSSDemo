@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/xxl_padding">
+
+
+    <LinearLayout
+        android:id="@+id/scanLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding"
+        android:layout_marginLeft="@dimen/xxl_padding"
+        android:layout_marginRight="@dimen/xxl_padding"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/button_drawable">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/xl_padding"
+            android:src="@drawable/scan"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scan_qr_code"
+            android:textSize="@dimen/small_font"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:textFontWeight="@integer/material_motion_duration_long_1"
+            android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/manualLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding"
+        android:layout_marginLeft="@dimen/xxl_padding"
+        android:layout_marginRight="@dimen/xxl_padding"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/xl_padding"
+        android:gravity="center"
+        android:background="@drawable/button_drawable">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/xl_padding"
+            android:src="@drawable/manual"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/maunalActiovationButton"
+            android:textSize="@dimen/small_font"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:textFontWeight="@integer/material_motion_duration_long_1"
+            android:gravity="center"/>
+    </LinearLayout>
+
+</LinearLayout>

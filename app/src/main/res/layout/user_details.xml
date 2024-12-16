@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/padding">
+
+
+        <TextView
+            android:id="@+id/renameTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_padding"
+            android:gravity="center"
+            android:textSize="@dimen/medium_font"
+            android:textColor="@color/black"/>
+
+
+            <EditText
+                android:id="@+id/edit_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/userName"
+                android:textSize="@dimen/medium_font"
+                android:padding="@dimen/small_padding"
+                android:background="@drawable/border_edittext"
+                android:layout_margin="@dimen/xl_padding"
+                android:textColor="@color/textGray"  />
+
+
+        <android.widget.Button
+            android:id="@+id/saveRename"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:layout_marginRight="@dimen/xxl_padding"
+            android:layout_marginLeft="@dimen/xxl_padding"
+            android:background="@drawable/button_drawable"/>
+    </LinearLayout>
+</ScrollView>

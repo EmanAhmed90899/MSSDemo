@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/large_padding"
+    android:layout_marginBottom="@dimen/padding"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mobile_number"
+        android:textColor="@color/black"
+        android:textSize="@dimen/small_font" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <!-- Country Code Picker -->
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/countryCodePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_edittext"
+            app:ccp_showFlag="true"
+            app:ccp_textSize="@dimen/small_font"
+            app:ccp_showFullName="false"
+            app:ccp_showNameCode="false" />
+<!--        <EditText-->
+<!--            android:id="@+id/et_country_code"-->
+<!--            android:layout_width="70dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:clickable="true"-->
+<!--            android:inputType="none"-->
+<!--            android:focusable="false"-->
+<!--            android:background="@drawable/border_edittext"-->
+<!--            android:padding="@dimen/small_padding" />-->
+
+        <EditText
+            android:id="@+id/et_mobile_number"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding"
+            android:singleLine="true"
+            android:hint="@string/numberHint"
+            android:background="@drawable/border_edittext"
+            android:padding="@dimen/small_padding" />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/errorMobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/small_font"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/xxl_padding"
+        android:textColor="@color/red"/>
+
+
+</LinearLayout>

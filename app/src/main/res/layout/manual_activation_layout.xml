@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/padding"
+        android:paddingBottom="@dimen/padding">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/manualActivation"
+            android:layout_marginBottom="@dimen/padding"
+            android:layout_marginTop="@dimen/xxl_padding"
+            android:textColor="@color/secondaryColor"
+            android:textSize="@dimen/medium_font"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:text="@string/manualActivationText"
+            android:textColor="@color/textGray"
+            android:textSize="@dimen/small_font" />
+
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activationId"
+        android:textSize="@dimen/small_font"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:id="@+id/activationId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_padding"
+        android:singleLine="true"
+        android:hint="@string/activationIdHint"
+        android:nextFocusDown="@+id/activationPassword"
+        android:textColor="@color/textGray"
+        android:background="@drawable/border_grey"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activationPassword"
+        android:textSize="@dimen/small_font"
+        android:layout_marginTop="@dimen/large_padding"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:id="@+id/activationPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_padding"
+        android:hint="@string/activationPasswordHint"
+        android:singleLine="true"
+        android:textColor="@color/textGray"
+        android:background="@drawable/border_grey"/>
+
+    <TextView
+        android:id="@+id/errorManualActivation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/small_font"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/xxl_padding"
+        android:textColor="@color/red"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stepContainer"/>
+    <android.widget.Button
+        android:id="@+id/activateButton"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/xxl_padding"
+        android:layout_marginRight="@dimen/xxl_padding"
+        android:layout_marginLeft="@dimen/xxl_padding"
+        android:background="@drawable/button_drawable"
+        android:text="@string/activate"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/white"
+        android:textSize="@dimen/small_font" />
+
+
+</LinearLayout>

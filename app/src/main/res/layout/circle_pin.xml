@@ -1,0 +1,94 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:padding="16dp"
+    android:layout_margin="16dp">
+
+    <!-- Circle 1 -->
+    <TextView
+        android:id="@+id/circle1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/circle_background_gray"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <!-- Add space between circles -->
+    <View
+        android:layout_width="8dp"
+        android:layout_height="0dp" />
+
+    <!-- Circle 2 -->
+    <TextView
+        android:id="@+id/circle2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/circle_background_gray"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <!-- Add space -->
+    <View
+        android:layout_width="8dp"
+        android:layout_height="0dp" />
+
+    <!-- Circle 3 -->
+    <TextView
+        android:id="@+id/circle3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/circle_background_gray"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <!-- Add space -->
+    <View
+        android:layout_width="8dp"
+        android:layout_height="0dp" />
+
+    <!-- Circle 4 -->
+    <TextView
+        android:id="@+id/circle4"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/circle_background_gray"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <!-- Add space -->
+    <View
+        android:layout_width="8dp"
+        android:layout_height="0dp" />
+
+    <!-- Circle 5 -->
+    <TextView
+        android:id="@+id/circle5"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/circle_background_gray"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <!-- Add space -->
+    <View
+        android:layout_width="8dp"
+        android:layout_height="0dp" />
+
+    <!-- Circle 6 -->
+    <TextView
+        android:id="@+id/circle6"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/circle_background_gray"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+</LinearLayout>

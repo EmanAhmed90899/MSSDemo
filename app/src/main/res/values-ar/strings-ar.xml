@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MSSDemo</string>
+    <string name="terms_and_conditions">الشروط والأحكام</string>
+    <string name="terms_and_conditions_text">
+      يتحمل العميل المسئولية وحده كاملة عن مشاركته كود المستخدم وكود المرور الخاص بخدمة الأهلي نت/ الأهلى موبايل مع الغير ودون أدنى مسئولية على البنك، وعلي العميل التأكد من تسجيل كل من رقم الهاتف المحمول والبريد الإلكتروني الصحيح الخاص به لدى البنك.يتحمل العميل المسئولية وحده كاملة عن مشاركته كود المستخدم وكود المرور الخاص بخدمة الأهلي نت/ الأهلى موبايل مع الغير ودون أدنى مسئولية على البنك، وعلي العميل التأكد من تسجيل كل من رقم الهاتف المحمول والبريد الإلكتروني الصحيح الخاص به لدى البنك.
+
+في حالة إضافة أكثر من مستخدم علي تطبيق رموز الأمان سيكون الكود السري (واحد فقط) لإنشاء الرقم السري المتغير OTP لجميع المستخدمين.
+
+   الرقم السري المتغير OTP يستخدم علي مختلف العمليات/ المعاملات الإلكترونية المتاحة علي خدمة الأهلي نت/ الأهلي موبايل مثل (التحويلات - خدمة فورى - شراء وثائق صناديق الاستثمار - تعديل بيانات العميل - إضافة/ تعديل مستفيد) أو  أي عملية/ معاملة يتم استحداثها أو إطلاقها فيما بعد لتأمين العمليات/ المعاملات الإلكترونية ويحق للبنك إرسالها علي رقم الهاتف المسجل علي الحساب أو البريد الإلكتروني أو بأي وسيلة أخري.
+
+التأكد من عدم الإفصاح عن الرقم السري المتغيرOTP للغير بما في ذلك موظفي البنك ويتحمل العميل المسئولية كاملة عن أية خسائر ناتجة عن إفصاحه عن البيانات ودون أدني مسئولية علي البنك.
+
+ بعد الموافقة علي الشروط والأحكام يعتبر العميل مسئول مسئولية كاملة عن أية عمليات/ معاملات تم تنفيذها من خلال خدمة الأهلى نت / الأهلي موبايل باستخدام الرقم السري المتغير OTP ولا يحق للعميل الاعتراض علي أي عملية/ معاملة تمت من خلال الخدمة.
+
+       في حالة تفعيل تطبيق رموز الأمان لا يتم إلغاء تفعيل جهاز رموز الأمان علي حسابات الأفراد للعملاء الحاليين و في حالة رغبة العملاء الجدد في تفعيل جهاز رموز الأمان، يرجي زيارة أقرب فرع من فروع مصرفنا لطلب جهاز رموز أمان جديد.
+
+في حالة طلب جهاز رموز أمان جديد سيتم تطبيق التعريفة المصرفية.
+    </string>
+    <string name="accept_terms_and_conditions">أوافق على الشروط والأحكام</string>
+    <string name="identity_verification">التحقق من الرقم القومي أو جواز السفر</string>
+    <string name="identity_verification_text">ادخل الرقم القومي او رقم جواز السفر للتحقق من هويتك.</string>
+    <string name="national_idOrPassport">رقم البطاقة أو جواز السفر</string>
+    <string name="numberHint"> أدخل الرقم</string>
+    <string name="confirm_national_idOrPassport">تأكيد رقم البطاقة أو جواز السفر</string>
+    <string name="confirmNumberHint">تأكيد الرقم</string>
+    <string name="next">التالي</string>
+    <string name="identity_empty">برجاء ادخال رقم قومي او رقم جواز السفر بشكل صحيح</string>
+    <string name="identity_not_match">الرقم القومي / رقم جواز السفر وتأكيد الرقم القومي / رقم جواز السفر غير متطابقان.</string>
+    <string name="identity_not_valid">رقم الهوية يجب ان يكون 14 رقم.</string>
+    <string name="mobile_number">رقم الهاتف المحمول</string>
+    <string name="mobile_number_verification">التحقق من رقم الهاتف المحمول</string>
+    <string name="mobile_number_verification_text">برجاء ادخال رقم الهاتف المحمول المسجل لدى البنك.</string>
+    <string name="mobile_number_error">رقم الهاتف المحمول غير صحيح.</string>
+    <string name="otp">رمز التحقق المستخدم لمرة واحدة (OTP)</string>
+    <string name="otp_text">تم ارسال رمز التحقق المستخدم لمرة واخدة (OTP) على هاتف سيادتكم المسجل لدى البنك يرجى التأكد من أن بطاقة الهاتف "SIM" لرقم الهاتف المسجل لدى البنك تعمل على هذا الجهاز.</string>
+    <string name="remaining">اتاحة إعادة ارسال الرمز بعد</string>
+    <string name="resendOtp">إعادة إرسال رمز التحقق المستخدم لمرة واحدة (OTP)</string>
+    <string name="incorrect_otp"> رمز التحقق المستخدم لمرة واحدة (OTP) غير صالح</string>
+    <string name="soft_token_activation">تفعيل تطبيق رموز الأمان</string>
+    <string name="soft_token_activation_text">قم بتسجيل الدخول إلى خدمة الاهلي نت / الاهلي موبايل واتبع الخطوات التالية للحصول على رمز الاستجابة السريع QR Code.
+
+- أضغط على القائمة الجانبية.n\
+- اضغط على خدمات رموز الأمان ثم خدمات تطبيق رموز الامان ثم تفعيل تطبيق رموز الامانn\
+- سيتم ارسال الرقم السري المتغير OTP على الهاتف المحمول المسجل لدي البنك (يرجى عدم مشاركة الرقم السري  مع أي شخص)n\
+ \n- الموافقة على الشروط والاحكام ثم الضغط على تأكيد. </string>
+    <string name="scan_qr_code">مسح رمز الاستجابة السريع QR Code لتفعيل تطبيق رموز الامان</string>
+    <string name="set_pin">إنشاء الكود السري</string>
+    <string name="set_pin_text">أنشئ رمز دخول قوي مكون من 6 أرقام.</string>
+    <string name="scanActivationData">قم بمسح بيانات التنشيط</string>
+    <string name="generateOTP">انشاء رمز التحقق</string>
+    <string name="scanned_data_info">تم قراءة البيانات</string>
+    <string name="scan_cancelled">تم الغاء قراءة البيانات</string>
+    <string name="no_data_decrypt">عفوا لا توجد بيانات لفك التشفير</string>
+    <string name="something_went_wrong">حدث خطأ ما</string>
+    <string name="error">خطأ</string>
+    <string name="open">فتح</string>
+    <string name="close">اغلاق</string>
+    <string name="addUser">اضافة مستخدم</string>
+    <string name="userDetails">بيانات المستخدم</string>
+    <string name="manageProtection">ادارة الحماية</string>
+    <string name="showAllUsers">عرض جميع المستخدمين</string>
+    <string name="changeLanguage">تغيير اللغة</string>
+    <string name="changeLanguageText">يرجى اختيار لغتك المفضلة</string>
+    <string name="save">حفظ</string>
+    <string name="invalidActivtionData">بيانات التنشيط غير صحيحة</string>
+    <string name="deleteUser">حذف مستخدم</string>
+    <string name="OTPText">الرقم السري المتغير OTP</string>
+    <string name="cancel">الغاء</string>
+    <string name="delete">حذف</string>
+    <string name="deleteUserTitle">حذف المستخدم</string>
+    <string name="deleteUserMessage">أنت تحاول حذف هذا المستخدم من تطبيق رموز الأمان، هل تريد المتابعة ؟</string>
+    <string name="requestPermission">طلب الاذن</string>
+    <string name="permissionMessage">هذا التطبيق يتطلب الوصول إلى الكاميرا لتوفير خدمات شخصية. يرجى منح الإذن للمتابعة.</string>
+
+    <string name="biometry_status">حالة البيومتري</string>
+    <string name="authentication_result_label">نتيجة المصادقة:</string>
+    <string name="biometry_supported">هل يدعم المصادقة البيومترية؟</string>
+    <string name="biometry_used">هل يمكن استخدام المصادقة البيومترية؟</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="verify_title">تحقق من بيومتري المستخدم</string>
+    <string name="verify_with_prompt">التحقق بالموجه</string>
+
+    <string name="biometric_prompt_title">BiometricSensorSDK عينة</string>
+    <string name="biometric_prompt_subtitle">المصادقة للمتابعة</string>
+    <string name="biometric_prompt_description">تستخدم هذه التطبيق المصادقة البيومترية لعرض وظائف BiometricSensorSDK</string>
+    <string name="authentication_failed_text">البيومتري لم يتم التعرف عليه. حاول مرة اخرى.</string>
+    <string name="biometric_prompt_button">إحباط المصادقة</string>
+
+    <string name="negative_button_called">تم استدعاء الزر السلبي</string>
+    <string name="scan_error">خطأ أثناء المسح: %s</string>
+    <string name="scan_fail">فشل المسح: %s</string>
+    <string name="scan_success">تم التحقق بنجاح</string>
+    <string name="internal_error">خطأ داخلي</string>
+    <string name="prompt_parameter_invalid">أحد معلمات الموجه غير صالح</string>
+    <string name="activity_null">النشاط فارغ</string>
+    <string name="biometric_listener_null">مستمع البيومتري فارغ</string>
+    <string name="context_null">السياق فارغ</string>
+    <string name="fragment_null">القطعة فارغة</string>
+    <string name="biometry_not_usable">البيومتري غير مدعوم من قبل الجهاز أو لا توجد بيانات بيومترية مسجلة</string>
+    <string name="permission_denied">لم يتم منح إذن البيومتري للتطبيق</string>
+    <string name="no_biometry_enrolled">لم يتم تسجيل أي بيومتريات</string>
+    <string name="unknown_error">خطأ غير معروف</string>
+    <string name="pinOption">الرمز السري</string>
+    <string name="biometricOption">الخاصيةالبيومترية</string>
+
+    <string name="RegistrationCode">رمز التسجيل</string>
+    <string name="ActivationPassword">الرقم السري للتسجيل</string>
+
+    <string name="activate">تفعيل</string>
+    <string name="activation_not_valid">برجاء ادخال بيانات التفعيل بشكل صحيح.</string>
+    <string name="enter_valid_data">الرجاء ادخال بيانات صحيحة</string>
+
+    <string name="arabic">العربية</string>
+    <string name="english">الإنجليزية</string>
+
+    <string name="selectUser">اختر مستخدم</string>
+    <string name="serialNumber">الرقم التسلسلي</string>
+    <string name="userName">اسم المستخدم</string>
+    <string name="enter_your_pin">الرجاء ادخال الرقم السري</string>
+    <string name="please_enter_6_digit">الرجاء ادخال 6 ارقام</string>
+    <string name="loading">جاري التحميل ...</string>
+
+    <string name="changePin">تغيير الرقم السري</string>
+    <string name="enter_new_pin">الكود السري الجديد</string>
+    <string name="enter_old_pin">الكود السري الحالي</string>
+    <string name="confirm">تأكيد</string>
+
+    <string name="userPasswordChanged">تم تغيير كلمة المرور بنجاح</string>
+    <string name="userPasswordNotChanged">لم يتم تغيير كلمة المرور، حدث خطأ ما</string>
+
+    <string name="congratulations">تهانينا</string>
+    <string name="createYourPin">قم بإنشاء رمز الدخول الخاص بك</string>
+    <string name="congMess">لقد تم إنشاء حساب الرمز المميز الخاص بك بنجاح.</string>
+
+    <string name="pin">الكود السري</string>
+    <string name="pinHint">ادخل  الكود السري</string>
+    <string name="confirmPin">تأكيد الكود السري</string>
+    <string name="biometricAuthEnable"> تفعيل  n\ المصادقة البيومترية </string>
+    <string name="biometricAuthFailed">فشل n\ المصادقة البيومترية</string>
+    <string name="biometricAuthSuccess">نجاح n\ المصادقة البيومترية</string>
+    <string name="pinNotSequentialOrRepeatedNumber">الكود السري الجديد غير آمن بسبب تكرار الأحرف. الرجاء استخدام كود مختلف</string>
+    <string name="pinNotMatch">يجب أن يتطابق الحقلان رمز المرور</string>
+    <string name="welcome">مرحبا</string>
+    <string name="generateOtpMess">نفذ معاملاتك بأمان.</string>
+    <string name="OTP">رمز التحقق</string>
+    <string name="copyOtp">نسخ رمز التحقق</string>
+    <string name="regenrateOtp">إعادة إنشاء رمز التحقق</string>
+
+    <string name="language">اللغة</string>
+    <string name="biometricAuthentication">المصادقة البيومترية</string>
+    <string name="changePasscode">تغيير الكود السري</string>
+    <string name="resetToken">مزامنة الوقت عبر الانترنت</string>
+    <string name="FAQs">الأسئلة الشائعة</string>
+    <string name="FAQsText">الأسئلة الشائعة</string>
+    <string name="FAQsTextDescription">إليك بعض الأسئلة الشائعة حول تطبيق رموز الامان من البنك الأهلي المصري</string>
+    <string name="Que1">هل الخدمة متاحة للأفراد والشركات؟</string>
+    <string name="Ans1">الخدمة متاحة لعملاء البنك الأهلي من الافراد فقط.</string>
+    <string name="Que2">هل يمكنني تفعيل تطبيق رموز الأمان على رقم هاتف محمول مختلف عن المسجل لدى البنك؟</string>
+    <string name="Ans2">لا، يجب على سيادتكم التأكد من أن بطاقة الـ SIM الخاصة برقم الهاتف المسجل لدي البنك على نفس الهاتف المستخدم في تفعيل تطبيق رموز الأمان.</string>
+    <string name="Que3">هل يمكنني استخدام تطبيق رموز الأمان وجهاز رموز الأمان معا لأنشاء الرقم السري المتغير ؟</string>
+    <string name="Ans3">نعم، يمكن استخدام تطبيق رموز الأمان وجهاز رموز الأمان علي كود المستخدم الخاص بالأفراد في حالة اشتراك سيادتكم في الوسيلتين معاً.</string>
+    <string name="about">عن التطبيق</string>
+    <string name="aboutTitle">عن تطبيق رموز الأمان المقدم من البنك الأهلي المصري</string>
+   <string name="about_description">تطبيق رموز الأمان المقدم من البنك الأهلي المصري هو تطبيق إلكتروني (APP) يتم استخدامه عن طريق الهاتف المحمول يتيح لك القيام بمعاملاتك البنكية عبر الانترنت والموبايل البنكي من خلال عملية مصادقة فعالة وامنه حيث يقوم التطبيق باستخراج الرقم السري المتغير  OTP الذي يستخدم مرة واحدة فقط لكل معاملة مالية / غير مالية من خلال الانترنت والموبيل البنكي والذي يتم تحميله من App store / Google Play. يرجى الاتصال بنا على 19623 للمزيد من المعلومات والاستفسارات.</string>
+   <string name="forget">نسيت؟</string>
+    <string name="copiedOtp">تم نسخ رمز التحقق</string>
+    <string name="addToken">إضافة مستخدم جديد</string>
+    <string name="renameUser">إعادة تسمية المستخدم</string>
+    <string name="ok">موافق</string>
+    <string name="manualActivation">تفعيل التطبيق</string>
+    <string name="manualActivationText">قم بتفعيل تطبيق رموز الأمان عن طريق إدخال بيانات التفعيل.</string>
+    <string name="timeShift">التأخير الزمني</string>
+    <string name="alais">الاسم المستعار</string>
+    <string name="detailsTitle">تفاصيل eToken</string>
+    <string name="details_eToken">تفاصيل حول eToken الخاص بك</string>
+    <string name="activationId">كود التفعيل</string>
+    <string name="activationIdHint">أدخل كود التفعيل</string>
+    <string name="activationPassword">كلمة مرور التفعيل</string>
+    <string name="activationPasswordHint">أدخل كلمة مرور التفعيل</string>
+    <string name="langType">العربية</string>
+    <string name="enter_new_pin_repeated">تأكيد الكود السري الجديد</string>
+    <string name="pleaseFillAllFields">الرجاء ملء جميع الحقول</string>
+    <string name="newPinNotMatch">الكود السري وتأكيد الكود السري الجديد غير متطابقان</string>
+    <string name="pinChangedSuccessfully">تم تغيير الكود السري بنجاح</string>
+    <string name="oldPinandNewPinError">لا يمكن أن يكون الكود السري الحالي والكود السري الجديد متطابقين</string>
+    <string name="notValidPin">الكود السري الجديد غير آمن بسبب تكرار الأحرف او تواجد ارقام متسلسلة. الرجاء استخدام كود مختلف</string>
+    <string name="change_pin_description">تغيير الكود السري الخاص بتطبيق رموز الأمان</string>
+    <string name="errorName">برجاء ادخال بيانات التفعيل / رمز الاستجابة السريع QR Code الخاصة بالمستخدم</string>
+<string name="maunalActiovationButton">ادخال بيانات تفعيل تطبيق رموز الامان</string>
+<string name="renameTitle">ما الاسم الذي تريد تغيير المستخدم اليه:</string>
+</resources>
