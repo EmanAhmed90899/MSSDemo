@@ -4,7 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +20,6 @@ public class RequestPermissionDialog {
     private Context context;
     private AlertDialog alertDialog;
     public static final int ACCESS_CAMERA_REQUEST_CODE = 1;
-    public static final int ACCESS_READ_PHONE_REQUEST_CODE = 1;
     private AlertDialog.Builder builder;
     private View dialogView;
 
@@ -45,9 +44,10 @@ public class RequestPermissionDialog {
         grantPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.CAMERA) || ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_PHONE_STATE)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.CAMERA) && ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_PHONE_STATE) && ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.RECEIVE_SMS) && ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_SMS)) {
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, ACCESS_CAMERA_REQUEST_CODE);
                 } else {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE}, ACCESS_CAMERA_REQUEST_CODE);
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, ACCESS_CAMERA_REQUEST_CODE);
                 }
                 alertDialog.dismiss();
             }
@@ -57,9 +57,12 @@ public class RequestPermissionDialog {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CAMERA}, ACCESS_CAMERA_REQUEST_CODE);
-                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_PHONE_STATE}, ACCESS_READ_PHONE_REQUEST_CODE);
-
+//
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                System.exit(0);
             }
 
         });

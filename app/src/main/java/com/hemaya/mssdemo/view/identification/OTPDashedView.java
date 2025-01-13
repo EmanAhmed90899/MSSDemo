@@ -21,8 +21,8 @@ public class OTPDashedView extends View {
     private static final int MAX_LENGTH = 6; // Adjust for the number of OTP digits
     private String otpInput = ""; // Stores OTP input as a string
     public Paint dashPaint, textPaint;
-    private int digitWidth = 70;  // Width for each digit area, adjust as needed
-    private int digitGap = 50;  // Gap between each digit
+    private float digitWidth ;  // Width for each digit area, adjust as needed
+    private float digitGap ;  // Gap between each digit
 
     public OTPDashedView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -48,11 +48,11 @@ public class OTPDashedView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        int startX = getWidth() / 2 - ((digitWidth + digitGap) * MAX_LENGTH / 2);
+        float startX = getWidth() / 2 - ((digitWidth + digitGap) * MAX_LENGTH / 2);
 
         for (int i = 0; i < MAX_LENGTH; i++) {
-            int x = startX + i * (digitWidth + digitGap);
-            int y = getHeight() / 2;
+            float x = startX + i * (digitWidth + digitGap);
+            float y = getHeight() / 2;
 
 
             if (otpInput.isEmpty()) {
@@ -96,5 +96,22 @@ public class OTPDashedView extends View {
      */
     public String getOtp() {
         return otpInput;
+    }
+
+    public void clearOtp() {
+        otpInput = "";
+        invalidate();
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        // Calculate total available width (screen width minus padding)
+        float  totalWidth = w - getPaddingLeft() - getPaddingRight();
+
+        // Dynamic digit width and gap calculation
+        digitGap = totalWidth * 0.02f; // 2% of total width for gap (adjustable)
+        digitWidth = (totalWidth - (digitGap * (MAX_LENGTH - 1))) / MAX_LENGTH;
     }
 }

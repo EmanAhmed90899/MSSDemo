@@ -23,9 +23,11 @@ import com.hemaya.mssdemo.model.UserModel.UserViewModel;
 import com.hemaya.mssdemo.presenter.change_pin.ChangePinPresenter;
 import com.hemaya.mssdemo.utils.storage.SharedPreferenceStorage;
 import com.hemaya.mssdemo.utils.useCase.ChangePinUseCase;
+import com.hemaya.mssdemo.utils.views.GenericPopUp;
+import com.hemaya.mssdemo.view.BaseActivity;
 import com.hemaya.mssdemo.view.home.HomeView;
 
-public class ChangePinView extends AppCompatActivity implements ChangePinViewInterface, ChangePinUseCase.ChangePinUseCaseInterface {
+public class ChangePinView extends BaseActivity implements ChangePinViewInterface, ChangePinUseCase.ChangePinUseCaseInterface {
     private EditText oldPin, newPin, newRepeatedPin;
     private String oldPinStr, newPinStr, newRepeatedPinStr;
     private Button changePinBtn;
@@ -56,18 +58,17 @@ public class ChangePinView extends AppCompatActivity implements ChangePinViewInt
         backImg = findViewById(R.id.backImg);
         presenter = new ChangePinPresenter(this, this, new ChangePinUseCase(this, new ViewModelProvider(this).get(UserViewModel.class), this));
         errorPin = findViewById(R.id.errorPin);
-        if (new SharedPreferenceStorage(this).getLanguage().equals("ar")) {
-            oldPin.setGravity(Gravity.END);
-            newPin.setGravity(Gravity.END);
-            newRepeatedPin.setGravity(Gravity.END);
-        }
+
+        applyGravityToAllEditTexts(oldPin);
+        applyGravityToAllEditTexts(newPin);
+        applyGravityToAllEditTexts(newRepeatedPin);
+
         onClick();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onClick() {
         backImg.setOnClickListener(v -> finish());
-
         changePinBtn.setOnClickListener(v -> {
             oldPinStr = oldPin.getText().toString();
             newPinStr = newPin.getText().toString();
@@ -84,23 +85,15 @@ public class ChangePinView extends AppCompatActivity implements ChangePinViewInt
 
     @Override
     public void showMessage(String message) {
-        errorPin.setText(message);
+        new GenericPopUp(this, message).showCustomPopup();
     }
 
+    private void applyGravityToAllEditTexts(EditText view) {
 
-    @Override
-    public void hideProgress() {
-
-    }
-
-    @Override
-    public void showProgress() {
-
-    }
-
-
-    @Override
-    public void showErrorMessage(String message) {
-        errorPin.setText(message);
+        if (new SharedPreferenceStorage(this).getLanguage().equals("ar")) {
+            view.setGravity(Gravity.RIGHT);
+        } else {
+            view.setGravity(Gravity.LEFT);
+        }
     }
 }

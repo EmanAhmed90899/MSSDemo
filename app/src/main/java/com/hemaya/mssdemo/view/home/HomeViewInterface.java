@@ -7,4 +7,5 @@ public interface HomeViewInterface {
     void setMultipleUsers();
     void goToActivation();
     void UserView(boolean isUserView);
+    void restart();
 }

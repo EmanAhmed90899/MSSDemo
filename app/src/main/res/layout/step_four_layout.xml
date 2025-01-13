@@ -40,7 +40,7 @@
         android:visibility="gone"
         android:layout_marginTop="@dimen/large_padding"
         android:textSize="@dimen/small_font"
-        android:textColor="@color/blue"/>
+        android:textColor="@color/secondaryColor"/>
     <TextView
         android:id="@+id/errorOTPMess"
         android:layout_width="wrap_content"

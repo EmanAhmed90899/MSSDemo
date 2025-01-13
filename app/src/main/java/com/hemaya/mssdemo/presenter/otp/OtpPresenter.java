@@ -47,4 +47,10 @@ public class OtpPresenter implements OtpPresenterInterface {
         otpViewInterface.showToast(context.getString(R.string.copiedOtp));
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void destroyApp() {
+        otpUseCase.clearAllData();
+    }
 }

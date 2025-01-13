@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
     <LinearLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
@@ -64,6 +65,7 @@
         android:padding="@dimen/small_padding"
         android:hint="@string/activationPasswordHint"
         android:singleLine="true"
+        android:inputType="number"
         android:textColor="@color/textGray"
         android:background="@drawable/border_grey"/>
 
@@ -80,20 +82,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/stepContainer"/>
-    <android.widget.Button
+    <RelativeLayout
         android:id="@+id/activateButton"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/xxl_padding"
-        android:layout_marginRight="@dimen/xxl_padding"
-        android:layout_marginLeft="@dimen/xxl_padding"
+        android:layout_marginTop="@dimen/large_padding"
         android:background="@drawable/button_drawable"
-        android:text="@string/activate"
-        android:fontFamily="@font/poppins"
-        android:textColor="@color/white"
-        android:textSize="@dimen/small_font" />
+        android:orientation="horizontal"
+        >
+        <ProgressBar
+            android:id="@+id/progressBarActivate"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:visibility="invisible"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/xxl_padding"
+            android:layout_marginLeft="@dimen/xxl_padding"
+            android:indeterminateTint="@color/white"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activate"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/small_font"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins"
+            />
+
+    </RelativeLayout>
 
 
 </LinearLayout>

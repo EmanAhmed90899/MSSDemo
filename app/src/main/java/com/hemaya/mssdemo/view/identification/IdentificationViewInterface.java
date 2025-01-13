@@ -11,13 +11,8 @@ public interface IdentificationViewInterface {
     public void onTypingEditText(EditText editText);
     public void onErrorEditText(EditText editText);
     public void onEmptyEditText(EditText editText);
-    void  showError(TextView editText, String error);
-
-    void onErrorCountryPicker(CountryCodePicker ccp);
-    public void onErrorOTP();
-    public void onEmptyOTP();
-    public void onSetOtp();
-    public void onTimerFinish();
+    void  showError( String error);
+    void goToHome();
 
     void updateLayout(Step step);
     void updateCongratulationLayout();
@@ -26,13 +21,15 @@ public interface IdentificationViewInterface {
     void initThirdStep();
     void initFifthStep();
     void initSixthStep();
-
+    void restartActivity();
     public void ShowChooseAuthDialog();
 
     public void showProgress();
 
+    void showLayoutLoading();
     public void hideProgress();
 
     public void showToast(String message);
 
+    void finishActivity();
 }

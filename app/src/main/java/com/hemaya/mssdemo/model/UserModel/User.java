@@ -3,7 +3,6 @@ package com.hemaya.mssdemo.model.UserModel;
 public class User {
 
     private int id;
-    private String platformFingerPrint;
     private String serialNumber;
     private String name;
     private String storageName;
@@ -13,9 +12,8 @@ public class User {
     private boolean isDetectionFingerPrint;
     private boolean isFirstLoginToEnableFingerPrint;
 
-    public User(int id, String platformFingerPrint, String serialNumber, String name,String storageName, boolean isUsed, int biometricId,boolean isDetectionFingerPrint,boolean isFirstLoginToEnableFingerPrint) {
+    public User(int id,  String serialNumber, String name,String storageName, boolean isUsed, int biometricId,boolean isDetectionFingerPrint,boolean isFirstLoginToEnableFingerPrint) {
         this.id = id;
-        this.platformFingerPrint = platformFingerPrint;
         this.serialNumber = serialNumber;
         this.name = name;
         this.storageName = storageName;
@@ -47,10 +45,6 @@ public class User {
         return id;
     }
 
-    public String getPlatformFingerPrint() {
-        return platformFingerPrint;
-    }
-
     public String getSerialNumber() {
         return serialNumber;
     }
@@ -74,9 +68,7 @@ public class User {
     public boolean isEdit() {
         return isEdit;
     }
-    public void setPlatformFingerPrint(String platformFingerPrint) {
-        this.platformFingerPrint = platformFingerPrint;
-    }
+
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
@@ -114,7 +106,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", platformFingerPrint='" + platformFingerPrint + '\'' +
                 ", serialNumber='" + serialNumber + '\'' +
                 ", name='" + name + '\'' +
                 ", storageName='" + storageName + '\'' +

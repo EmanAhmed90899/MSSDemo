@@ -6,13 +6,11 @@ import android.content.SharedPreferences;
 public class SharedPreferenceStorage {
     private static final String PREF_NAME = "User"; // Shared Preference file name
     private static final String KEY_USER_ID = "userId";
-    private static final String KEY_PLATFORM_FINGER_PRINT = "platformFingerPrint";
     private static final String KEY_STORAGE_NAME = "storageName";
     private static final String KEY_INITIATE_DETECTION = "initiateDetection";
     private static final String KEY_Language = "language";
-    private static final String KEY_REGISTRATION_ID = "registrationId";
-    private static final String KEY_MESSAGE_INSTANCE = "messageInstance";
-    private static final String KEY_TIME_SHIFT = "messageInstance";
+    private static final String KEY_TIME_SHIFT = "TIME_SHIFT";
+    private static final String KEY_USER_NAME = "userName";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -28,10 +26,16 @@ public class SharedPreferenceStorage {
     public void clearData() {
         setStorageName(null);
         setUserId(null);
-        setPlatformFingerPrint(null);
-
     }
 
+    public String getUserName() {
+        return sharedPreferences.getString(KEY_USER_NAME, null);
+    }
+
+    public void setUserName(String userName) {
+        editor.putString(KEY_USER_NAME, userName);
+        editor.apply();
+    }
 
     public String getUserId() {
         return sharedPreferences.getString(KEY_USER_ID, null);
@@ -41,14 +45,7 @@ public class SharedPreferenceStorage {
         editor.putString(KEY_USER_ID, userId);
         editor.apply();
     }
-    public String getPlatformFingerPrint() {
-        return sharedPreferences.getString(KEY_PLATFORM_FINGER_PRINT, null);
-    }
 
-    public void setPlatformFingerPrint(String platformFingerPrint) {
-        editor.putString(KEY_PLATFORM_FINGER_PRINT, platformFingerPrint);
-        editor.apply();
-    }
 
     public String getStorageName() {
         return sharedPreferences.getString(KEY_STORAGE_NAME, null);
@@ -60,7 +57,7 @@ public class SharedPreferenceStorage {
         editor.apply();
     }
     public String getLanguage() {
-        return sharedPreferences.getString(KEY_Language, "en");
+        return sharedPreferences.getString(KEY_Language, "");
     }
 
     public void setLanguage(String language) {
@@ -74,22 +71,6 @@ public class SharedPreferenceStorage {
 
     public void setInitiateDetection(boolean initiateDetection) {
         editor.putBoolean(KEY_INITIATE_DETECTION, initiateDetection);
-        editor.apply();
-    }
-
-    public String getRegistrationId() {
-        return sharedPreferences.getString(KEY_REGISTRATION_ID, null);
-    }
-    public void setRegistrationId(String registrationId) {
-        editor.putString(KEY_REGISTRATION_ID, registrationId);
-        editor.apply();
-    }
-
-    public String getMessageInstance() {
-        return sharedPreferences.getString(KEY_MESSAGE_INSTANCE, null);
-    }
-    public void setMessageInstance(String messageInstance) {
-        editor.putString(KEY_MESSAGE_INSTANCE, messageInstance);
         editor.apply();
     }
 

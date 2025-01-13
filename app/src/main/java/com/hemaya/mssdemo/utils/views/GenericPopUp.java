@@ -1,13 +1,16 @@
 package com.hemaya.mssdemo.utils.views;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -16,12 +19,10 @@ import com.hemaya.mssdemo.R;
 
 public class GenericPopUp {
     Context mContext;
-    String title;
     String message;
 
-    public GenericPopUp(Context context, String title, String message) {
+    public GenericPopUp(Context context, String message) {
         mContext = context;
-        this.title = title;
         this.message = message;
     }
 
@@ -43,6 +44,16 @@ public class GenericPopUp {
 
         // Create and show the popup
         AlertDialog dialog = builder.create();
+// Set width to 80% of the screen width
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+            int width = (int) (metrics.widthPixels * 0.5); // 80% of screen width
+            window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
+
+
+        }
         dialog.show();
 
 
@@ -50,7 +61,6 @@ public class GenericPopUp {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
                 if (message.equals(mContext.getString(R.string.errorName))) {
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
@@ -58,6 +68,7 @@ public class GenericPopUp {
                     mContext.startActivity(intent);
                     System.exit(0);
                 }
+                dialog.dismiss();
             }
         });
     }

@@ -47,6 +47,8 @@
             android:layout_marginRight="@dimen/padding"
             android:singleLine="true"
             android:hint="@string/numberHint"
+            android:maxLength="11"
+            android:inputType="phone"
             android:background="@drawable/border_edittext"
             android:padding="@dimen/small_padding" />
 

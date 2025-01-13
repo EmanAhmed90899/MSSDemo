@@ -26,7 +26,6 @@ public class UserDatabaseHelper extends SQLiteOpenHelper {
 
     // Column names
     private static final String COLUMN_ID = "id";
-    private static final String COLUMN_PLATFORM_FINGERPRINT = "platformFingerPrint";
     private static final String COLUMN_SERIAL_NUMBER = "serialNumber";
     private static final String COLUMN_NAME = "name";
     private static final String COLUMN_STORAGE_NAME = "storageName";
@@ -48,7 +47,6 @@ public class UserDatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_USER =
             "CREATE TABLE " + TABLE_USER + "("
                     + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + COLUMN_PLATFORM_FINGERPRINT + " TEXT, "
                     + COLUMN_SERIAL_NUMBER + " TEXT, "
                     + COLUMN_NAME + " TEXT, "
                     + COLUMN_STORAGE_NAME + " TEXT, "
@@ -100,15 +98,13 @@ SaveInLocalStorage saveInLocalStorage;
     public long addUser(String platformFingerPrint, String serialNumber, String name, boolean isUsed, String storageName) {
         User foundedUser = IsUserFound(serialNumber.substring(0, serialNumber.indexOf('-')));
         if(foundedUser != null) {
-
-            saveInLocalStorage = new SaveInLocalStorage(context, foundedUser.getStorageName(),foundedUser.getPlatformFingerPrint());
+            saveInLocalStorage = new SaveInLocalStorage(context, foundedUser.getStorageName());
             saveInLocalStorage.deleteStorage(foundedUser.getStorageName());
             deleteUser(foundedUser.getId());
         }
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_PLATFORM_FINGERPRINT, platformFingerPrint);
         values.put(COLUMN_SERIAL_NUMBER, serialNumber);
         values.put(COLUMN_NAME, name);
         values.put(COLUMN_STORAGE_NAME, storageName);
@@ -142,7 +138,6 @@ SaveInLocalStorage saveInLocalStorage;
                 db.close();
                 User user=new User(
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PLATFORM_FINGERPRINT)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SERIAL_NUMBER)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STORAGE_NAME)),
@@ -219,7 +214,7 @@ SaveInLocalStorage saveInLocalStorage;
 
         // Query the database
         Cursor cursor = db.query(TABLE_USER,
-                new String[]{COLUMN_ID, COLUMN_PLATFORM_FINGERPRINT, COLUMN_SERIAL_NUMBER, COLUMN_NAME, COLUMN_STORAGE_NAME, COLUMN_IS_USED, COLUMN_Biometric_USER_ID, COLUMN_IS_FIRST_LOGIN_TO_ENABLE_FINGERPRINT},
+                new String[]{COLUMN_ID, COLUMN_SERIAL_NUMBER, COLUMN_NAME, COLUMN_STORAGE_NAME, COLUMN_IS_USED, COLUMN_Biometric_USER_ID, COLUMN_IS_FIRST_LOGIN_TO_ENABLE_FINGERPRINT},
                 COLUMN_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null) {
@@ -229,7 +224,6 @@ SaveInLocalStorage saveInLocalStorage;
         // Create a User object
         User user = new User(
                 cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PLATFORM_FINGERPRINT)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SERIAL_NUMBER)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STORAGE_NAME)),
@@ -256,7 +250,6 @@ SaveInLocalStorage saveInLocalStorage;
             do {
                 User user = new User(
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PLATFORM_FINGERPRINT)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SERIAL_NUMBER)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STORAGE_NAME)),
@@ -323,7 +316,6 @@ SaveInLocalStorage saveInLocalStorage;
         if (cursor != null && cursor.moveToFirst()) {
             user = new User(
                     cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PLATFORM_FINGERPRINT)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SERIAL_NUMBER)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STORAGE_NAME)),
@@ -485,5 +477,28 @@ SaveInLocalStorage saveInLocalStorage;
         return count;
     }
 
+    public int selectAnotherUser() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to select one user where isUsed = 1
+        String selectQuery = "SELECT * FROM " + TABLE_USER + " LIMIT 1";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+            updateIsUsed(id + "", true);
+            cursor.close();
+            return id;
+        } else {
+            return -1;
+        }
+    }
+
+    public void deleteAllUsers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+ TABLE_USER);
+        db.execSQL("delete from "+ TABLE_USER_BIOMETRIC);
+    }
 }
 

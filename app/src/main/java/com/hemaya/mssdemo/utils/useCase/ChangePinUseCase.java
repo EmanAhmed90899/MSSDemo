@@ -1,17 +1,16 @@
 package com.hemaya.mssdemo.utils.useCase;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.hemaya.mssdemo.R;
 import com.hemaya.mssdemo.model.UserModel.User;
 import com.hemaya.mssdemo.model.UserModel.UserViewModel;
+import com.hemaya.mssdemo.utils.storage.GetDevicePlatform;
 import com.hemaya.mssdemo.utils.storage.SaveInLocalStorage;
 import com.hemaya.mssdemo.utils.storage.UserDatabaseHelper;
 import com.vasco.digipass.sdk.DigipassSDK;
@@ -34,16 +33,25 @@ public class ChangePinUseCase {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void changePin(String oldPinStr, String newPinStr) {
         user = new UserDatabaseHelper(context).getOneUsedUser();
-        saveInLocalStorage = new SaveInLocalStorage(context, user.getStorageName(), user.getPlatformFingerPrint());
+        String platformFingerPrint = new GetDevicePlatform(context).getFingerPrint();
+        saveInLocalStorage = new SaveInLocalStorage(context, user.getStorageName());
         GenericResponse genericResponse = DigipassSDK.changePasswordWithFingerprint(
-                saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), oldPinStr, newPinStr, user.getPlatformFingerPrint()
+                saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), oldPinStr, newPinStr, platformFingerPrint
         );
 
         String message = "";
         if (genericResponse.getReturnCode() != DigipassSDKReturnCodes.SUCCESS) {
+            if (genericResponse.getReturnCode() == -4029) {
+                Log.e("ChangePinUseCase", "changePin: " + DigipassSDK.getMessageForReturnCode(
+                        genericResponse.getReturnCode()
+                ));
+                message += context.getResources().getString(R.string.currentPinNotVaild);
+                changePinUseCaseInterface.showMessage(message);
+            } else {
+                message += context.getResources().getString(R.string.userPasswordNotChanged);
+                changePinUseCaseInterface.showMessage(message);
 
-            message += context.getResources().getString(R.string.userPasswordNotChanged);
-            changePinUseCaseInterface.showMessage(message);
+            }
         } else {
 
             message += context.getResources().getString(R.string.userPasswordChanged);

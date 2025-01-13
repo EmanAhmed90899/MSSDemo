@@ -84,7 +84,6 @@ public class HomeView extends BaseActivity implements HomeViewInterface {
     private void onClick() {
         showAllUsers.setOnClickListener(v -> {
             UsersBottomSheet usersBottomSheet = new UsersBottomSheet(homePresenter, userViewModel);
-
             usersBottomSheet.show(getSupportFragmentManager(), "usersBottomSheet");
         });
         otpLayout.setOnClickListener(v -> {
@@ -93,7 +92,7 @@ public class HomeView extends BaseActivity implements HomeViewInterface {
         });
 
         menuIcon.setOnClickListener(v -> {
-            MenuBottomSheet menuBottomSheet = new MenuBottomSheet(homePresenter, homeUseCase, userViewModel);
+            MenuBottomSheet menuBottomSheet = new MenuBottomSheet(HomeView.this,homePresenter, homeUseCase, userViewModel);
             menuBottomSheet.show(getSupportFragmentManager(), "menuBottomSheet");
         });
     }
@@ -145,6 +144,13 @@ public class HomeView extends BaseActivity implements HomeViewInterface {
 
 
         }
+    }
+
+    @Override
+    public void restart() {
+        Intent intent = new Intent(HomeView.this, HomeView.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

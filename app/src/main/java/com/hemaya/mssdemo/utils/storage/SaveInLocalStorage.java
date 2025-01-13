@@ -20,27 +20,21 @@ public class SaveInLocalStorage {
     String platformFingerPrint;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public SaveInLocalStorage(Context context, String fileName, String platformFingerPrint) {
+    public SaveInLocalStorage(Context context, String fileName) {
         this.context = context;
         this.fileName = fileName;
-        this.platformFingerPrint = platformFingerPrint;
-        getPlatformFingerPrint();
+        platformFingerPrint = new GetDevicePlatform(context).getFingerPrint();
         initSecureStorage();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void initSecureStorage() {
         try {
-            // Initialize a secure storage
-            Log.e("** PLATFO", platformFingerPrint);
-            Log.e("** FILENAM", fileName);
 
             secureStorage =
                     SecureStorageSDK.init(
                             fileName, platformFingerPrint, getIterationNumber(), context);
-            Log.e("** initSecureStorage", "Secure Storage initialized successfully");
         } catch (SecureStorageSDKException e) {
-            Log.e("** initSecureStorageError", "Failed to init Secure Storage, " + getErrorMessage(e));
             handleUnreadableAndCorruptedStorageException(e);
         }
 
@@ -189,9 +183,14 @@ public class SaveInLocalStorage {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void getPlatformFingerPrint() {
-        if (platformFingerPrint.isEmpty()) {
-            platformFingerPrint = new GetDevicePlatform(context).getFingerPrint();
+    public void clearData() {
+        try {
+            secureStorage.clear();
+            saveSecureStorage();
+        } catch (SecureStorageSDKException e) {
+            Log.e("** clearDataError", "Failed to clear data, " + getErrorMessage(e));
         }
     }
+
+
 }

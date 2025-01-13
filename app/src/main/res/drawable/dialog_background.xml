@@ -1,7 +1,9 @@
 <!-- res/drawable/dialog_background.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="#FFFFFF" /> <!-- Background color -->
-    <corners android:radius="16dp" />  <!-- Corner radius -->
+    <corners android:radius="16dp" />
+    <stroke android:width="2dp" android:color="@color/appColor"/>
+    <!-- Corner radius -->
     <padding
         android:top="16dp"
         android:bottom="16dp"

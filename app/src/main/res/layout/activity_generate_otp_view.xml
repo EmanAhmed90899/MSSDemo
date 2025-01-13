@@ -34,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:padding="@dimen/padding"
                 android:text="@string/generateOTP"
                 android:textColor="@color/black"
@@ -41,11 +42,20 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/homeImg"
+        <LinearLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/home" />
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding">
+
+            <ImageView
+                android:id="@+id/homeImg"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/home" />
+        </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
@@ -55,10 +65,10 @@
 
         <include
             layout="@layout/show_otp"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/enter_pin_layout"
@@ -76,14 +86,15 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/medium_font"
                 android:textStyle="bold" />
+
             <LinearLayout
                 android:id="@+id/dynamic_container"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"/>
+                android:orientation="horizontal" />
 
             <View
                 android:layout_width="match_parent"

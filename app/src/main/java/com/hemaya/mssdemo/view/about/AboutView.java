@@ -10,8 +10,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.hemaya.mssdemo.R;
+import com.hemaya.mssdemo.view.BaseActivity;
 
-public class AboutView extends AppCompatActivity {
+public class AboutView extends BaseActivity {
 ImageView backImg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

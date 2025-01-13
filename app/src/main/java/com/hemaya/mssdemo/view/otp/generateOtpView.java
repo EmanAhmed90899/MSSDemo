@@ -1,10 +1,7 @@
 package com.hemaya.mssdemo.view.otp;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -32,10 +28,13 @@ public class generateOtpView extends BaseActivity implements OtpViewInterface, C
     StringBuilder pinBuilder;
     RelativeLayout show_otp;
     OtpPresenter otpPresenter;
-    TextView otp_text,counterTxt;
+    TextView otp_text, counterTxt, generateOtp;
     Button regenerateOtp;
-    ImageView backImg,homeImg;
+    ImageView backImg, homeImg, clearImg;
     CountTimer countTimer;
+    boolean isGeneratedEnabled = false;
+    int counter = 0;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -65,6 +64,11 @@ public class generateOtpView extends BaseActivity implements OtpViewInterface, C
         counterTxt = findViewById(R.id.counterTxt);
         otpPresenter = new OtpPresenter(this);
         regenerateOtp = findViewById(R.id.regenerateOtp);
+        generateOtp = findViewById(R.id.ok);
+        clearImg = findViewById(R.id.clear);
+
+        regenerateOtp.setBackground(getResources().getDrawable(R.drawable.border_layout));
+        regenerateOtp.setTextColor(getResources().getColor(R.color.gray));
         assign();
         onClick();
     }
@@ -90,14 +94,42 @@ public class generateOtpView extends BaseActivity implements OtpViewInterface, C
         });
 
         regenerateOtp.setOnClickListener(v -> {
-            otpPresenter.generateOtp(pinBuilder.toString());
+            if (isGeneratedEnabled) {
+                countTimer.cancelTimer();
+                otpPresenter.generateOtp(pinBuilder.toString());
+            }
 
+        });
+        generateOtp.setOnClickListener(v -> {
+            if (pinBuilder.length() == 6) {
+                if (counter == 4) {
+                  otpPresenter.destroyApp();
+                } else {
+                    counter++;
+                    otpPresenter.generateOtp(pinBuilder.toString());
+
+            }
+        }
+    });
+        clearImg.setOnClickListener(v ->
+
+    {
+        if (pinBuilder.length() > 0) {
+            pinBuilder.deleteCharAt(pinBuilder.length() - 1);
+            dynamicContainer.removeViewAt(pinBuilder.length());
+            View viewCircle = new View(this);
+            ViewGroup.MarginLayoutParams layoutParams = new LinearLayout.LayoutParams(35, 35);
+            viewCircle.setLayoutParams(layoutParams);
+            viewCircle.setBackgroundResource(R.drawable.circle_background_gray);
+            layoutParams.setMargins(5, 0, 5, 0);  // 50px left & right, 30px top & bottom
+            dynamicContainer.addView(viewCircle, pinBuilder.length());
+        }
         });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onNumberClick(View view) {
-        if (pinBuilder.length() <= 6) {
+        if (pinBuilder.length() < 6) {
             View viewCircle = new View(this);
             pinBuilder.append(((TextView) view).getText().toString());
             ViewGroup.MarginLayoutParams layoutParams = new LinearLayout.LayoutParams(35, 35);
@@ -107,9 +139,9 @@ public class generateOtpView extends BaseActivity implements OtpViewInterface, C
             dynamicContainer.removeViewAt(pinBuilder.length() - 1);
             dynamicContainer.addView(viewCircle, pinBuilder.length() - 1);
 
-            if (pinBuilder.length() >= 6) {
-                otpPresenter.generateOtp(pinBuilder.toString());
-            }
+//            if (pinBuilder.length() >= 6) {
+//                otpPresenter.generateOtp(pinBuilder.toString());
+//            }
 
         }
     }
@@ -131,7 +163,7 @@ public class generateOtpView extends BaseActivity implements OtpViewInterface, C
             enter_pin_layout.setVisibility(View.GONE);
             show_otp.setVisibility(View.VISIBLE);
             otp_text.setText(otp);
-            countTimer = new CountTimer(counterTxt,  this);
+            countTimer = new CountTimer(counterTxt, this, 1.5, "");
             countTimer.startOTPTimer();
         }
     }
@@ -143,12 +175,14 @@ public class generateOtpView extends BaseActivity implements OtpViewInterface, C
 
 
     @Override
-    public void onSetOtp() {
-
+    public void onTimerFinish() {
+        finish();
     }
 
     @Override
-    public void onTimerFinish() {
-
+    public void onRegeneratedEnabled() {
+        isGeneratedEnabled = true;
+        regenerateOtp.setBackground(getResources().getDrawable(R.drawable.border_edittext));
+        regenerateOtp.setTextColor(getResources().getColor(R.color.appColor));
     }
 }

@@ -6,16 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
-
 import com.hemaya.mssdemo.R;
-import com.hemaya.mssdemo.model.UserModel.User;
 import com.hemaya.mssdemo.utils.useCase.HomeUseCase;
 
 
 public class DeleteUserDialog {
     Context context;
-    Button deleteBtn, cancelBtn;
-    User user;
+    Button deleteBtn,cancelBtn;
     private AlertDialog dialog;
     HomeUseCase homeUseCase;
 
@@ -33,8 +30,8 @@ public class DeleteUserDialog {
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.delete_user, null);
 
-        cancelBtn = dialogView.findViewById(R.id.cancel);
         deleteBtn = dialogView.findViewById(R.id.deleteUser);
+        cancelBtn = dialogView.findViewById(R.id.cancel_button);
         dialog = new AlertDialog.Builder(context)
                 .setView(dialogView)
                 .create();
@@ -48,17 +45,16 @@ public class DeleteUserDialog {
 
 
     private void onclick() {
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 homeUseCase.deleteUser();
-                dialog.dismiss();
-            }
-        });
-
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 dialog.dismiss();
             }
         });

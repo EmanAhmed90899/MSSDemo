@@ -5,7 +5,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -14,7 +13,6 @@ import com.hemaya.mssdemo.R;
 import com.hemaya.mssdemo.model.UserModel.User;
 import com.hemaya.mssdemo.presenter.details.DetailsPresenter;
 import com.hemaya.mssdemo.presenter.details.DetailsPresenterInterface;
-import com.hemaya.mssdemo.utils.storage.SharedPreferenceStorage;
 import com.hemaya.mssdemo.view.BaseActivity;
 
 public class UserDetails extends BaseActivity implements UserDetailsInterface {

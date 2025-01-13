@@ -3,7 +3,6 @@ package com.hemaya.mssdemo.presenter.identification;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,7 +13,11 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.hbb20.CountryCodePicker;
 import com.hemaya.mssdemo.R;
+import com.hemaya.mssdemo.model.ActivationModel;
+import com.hemaya.mssdemo.utils.langauge.LocaleHelper;
+import com.hemaya.mssdemo.utils.storage.SharedPreferenceStorage;
 import com.hemaya.mssdemo.utils.useCase.ActivationUseCase;
+import com.hemaya.mssdemo.utils.useCase.IdentificationUseCase;
 import com.hemaya.mssdemo.utils.views.BiometricSensorSDKScanListenerImpl;
 import com.hemaya.mssdemo.view.identification.CountTimer;
 import com.hemaya.mssdemo.view.identification.IdentificationViewInterface;
@@ -28,19 +31,27 @@ import com.vasco.digipass.sdk.utils.biometricsensor.BiometricSensorSDKScanListen
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IdentificationPresenter implements IdentificationPresenterInterface {
+public class IdentificationPresenter implements IdentificationPresenterInterface, IdentificationUseCase.IdentificationUseCaseListener {
+
+
     IdentificationViewInterface identificationViewInterface;
     private Step currentStep = Step.STEP_ONE;
     private CountTimer countTimer;
     private Context context;
     private boolean checkTermsVal = false;
+    boolean isAddNewUser = false;
     ActivationUseCase activationUseCase;
+    private IdentificationUseCase identificationUseCase;
+    private ActivationModel activationModel;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public IdentificationPresenter(IdentificationViewInterface identificationViewInterface) {
         this.identificationViewInterface = identificationViewInterface;
         this.context = (Context) identificationViewInterface;
+        identificationUseCase = new IdentificationUseCase(context);
         activationUseCase = new ActivationUseCase(context);
+        activationUseCase.setSetResult((ActivationUseCase.SetResult) context);
+        identificationUseCase.setIdentificationUseCaseListener(this);
     }
 
     @Override
@@ -50,11 +61,22 @@ public class IdentificationPresenter implements IdentificationPresenterInterface
     }
 
 
-    @Override
-    public void pressBack() {
-//        currentStep = currentStep.getPrevious();
-//        identificationViewInterface.updateLayout(currentStep);
 
+    @Override
+    public void pressBack(boolean isAddNewUser) {
+        this.isAddNewUser = isAddNewUser;
+
+        if (isAddNewUser) {
+            identificationViewInterface.goToHome();
+        }else if (currentStep == Step.STEP_ONE) {
+            identificationViewInterface.finishActivity();
+        } else {
+            if (currentStep == Step.STEP_FOUR) {
+                countTimer.cancelTimer();
+            }
+            currentStep = Step.STEP_ONE;
+            identificationViewInterface.updateLayout(currentStep);
+        }
     }
 
     @Override
@@ -62,6 +84,7 @@ public class IdentificationPresenter implements IdentificationPresenterInterface
         if (countTimer != null) {
             if (countTimer.countDownTimer != null) {
                 countTimer.countDownTimer.cancel();
+                countTimer.countDownTimer = null;
             }
         }
         return null;
@@ -85,25 +108,20 @@ public class IdentificationPresenter implements IdentificationPresenterInterface
         String nationalIdConf = nationalIdConfEd.getText().toString();
 
         if (nationalId.isEmpty() && nationalIdConf.isEmpty()) {
-            identificationViewInterface.onErrorEditText(nationalIdEd);
-            identificationViewInterface.onErrorEditText(nationalIdConfEd);
-            identificationViewInterface.showError(messageErrorTxt, context.getResources().getString(R.string.identity_empty));
             return false;
         } else {
-            if (nationalId.equals(nationalIdConf) && nationalId.equals("29609301601801")&&isValidNID("29609301601801",new StringBuilder())) {
-                currentStep = currentStep.getNext();
-                activationUseCase.setUserName("test_user");
-                identificationViewInterface.updateLayout(currentStep);
-                return true;
-            } else if (!nationalId.equals(nationalIdConf)) {
-                identificationViewInterface.onErrorEditText(nationalIdEd);
-                identificationViewInterface.onErrorEditText(nationalIdConfEd);
-                identificationViewInterface.showError(messageErrorTxt, context.getResources().getString(R.string.identity_not_match));
+            nationalId = nationalId.trim();
+            nationalIdConf = nationalIdConf.trim();
+            if (!nationalId.equals(nationalIdConf)) {
+                identificationViewInterface.showError(context.getResources().getString(R.string.identity_not_match));
                 return false;
+            } else if (isValidNID(nationalId, new StringBuilder()) || isValidPassport(nationalId)) {
+
+                showProgress();
+                identificationUseCase.validateUser(nationalId);
+                return true;
             } else {
-                identificationViewInterface.onErrorEditText(nationalIdEd);
-                identificationViewInterface.onErrorEditText(nationalIdConfEd);
-                identificationViewInterface.showError(messageErrorTxt, context.getResources().getString(R.string.identity_not_valid));
+                identificationViewInterface.showError(context.getResources().getString(R.string.invalid_national_idOrPassport));
                 return false;
             }
 
@@ -112,7 +130,7 @@ public class IdentificationPresenter implements IdentificationPresenterInterface
 
     @Override
     public void validateOtp(TextView counterTxt) {
-        countTimer = new CountTimer(counterTxt, (Context) identificationViewInterface);
+        countTimer = new CountTimer(counterTxt, (Context) identificationViewInterface, 1, context.getResources().getString(R.string.remaining));
         countTimer.startOTPTimer();
 
     }
@@ -124,14 +142,10 @@ public class IdentificationPresenter implements IdentificationPresenterInterface
         String confirmPinStr = confirmPin.getText().toString();
         if (!pinStr.isEmpty() && !confirmPinStr.isEmpty()) {
             if (!pinStr.equals(confirmPinStr)) {
-                identificationViewInterface.onErrorEditText(pin);
-                identificationViewInterface.onErrorEditText(confirmPin);
-                identificationViewInterface.showError(messageErrorTxt, context.getResources().getString(R.string.pinNotMatch));
+                identificationViewInterface.showError(context.getResources().getString(R.string.pinNotMatch));
                 return false;
             } else if (pinStr.length() != 6 || isSequential(pinStr) || isRepeated(pinStr)) {
-                identificationViewInterface.onErrorEditText(pin);
-                identificationViewInterface.onErrorEditText(confirmPin);
-                identificationViewInterface.showError(messageErrorTxt, context.getResources().getString(R.string.pinNotSequentialOrRepeatedNumber));
+                identificationViewInterface.showError(context.getResources().getString(R.string.pinNotSequentialOrRepeatedNumber));
                 return false;
             } else {
                 if
@@ -145,6 +159,30 @@ public class IdentificationPresenter implements IdentificationPresenterInterface
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void changeLang() {
+        SharedPreferenceStorage sharedPreferenceStorage = new SharedPreferenceStorage(context);
+
+        if (sharedPreferenceStorage.getLanguage().equals("en")) {
+            LocaleHelper.setLocale(context, "ar");
+            sharedPreferenceStorage.setLanguage("ar");
+        } else if (sharedPreferenceStorage.getLanguage().equals("ar")) {
+            LocaleHelper.setLocale(context, "en");
+            sharedPreferenceStorage.setLanguage("en");
+        }
+        identificationViewInterface.restartActivity();
+    }
+
+    @Override
+    public void resendOTP() {
+        identificationUseCase.resendOtp();
+    }
+
+    @Override
+    public void showSettingDialog() {
+        activationUseCase.redirectToSettings();
     }
 
     @Override
@@ -163,35 +201,33 @@ public class IdentificationPresenter implements IdentificationPresenterInterface
     }
 
     @Override
-    public boolean validatePhone(String phoneNumber, EditText phone, CountryCodePicker ccp, TextView messageErrorTxt) {
+    public boolean validatePhone(String region, String phoneNumber, EditText phone, CountryCodePicker ccp, TextView messageErrorTxt) {
         if (!phoneNumber.isEmpty()) {
-            if (phoneNumber.equals("201287265315")) {
-                currentStep = currentStep.getNext();
-                identificationViewInterface.updateLayout(currentStep);
-                return true;
-            } else {
-                identificationViewInterface.onErrorEditText(phone);
-                identificationViewInterface.showError(messageErrorTxt, context.getResources().getString(R.string.mobile_number_error));
-                identificationViewInterface.onErrorCountryPicker(ccp);
-
-                return false;
-            }
+            showProgress();
+            identificationUseCase.checkMobile(phoneNumber, region);
+            return true;
         } else {
-
             return false;
         }
     }
 
     @Override
-    public void successOTP() {
-        currentStep = currentStep.getNext();
-        identificationViewInterface.updateLayout(currentStep);
+    public void successOTP(String otp) {
+        if (otp != null) {
+            showProgress();
+            identificationUseCase.validateOtp(otp);
+        }
     }
 
 
     @Override
     public void takePermission() {
         activationUseCase.takePermission();
+    }
+
+    @Override
+    public boolean checkPermission() {
+        return activationUseCase.checkAllPermission();
     }
 
     @Override
@@ -404,7 +440,7 @@ public class IdentificationPresenter implements IdentificationPresenterInterface
         }
     }
 
-    public  boolean isValidNID(String NID, StringBuilder traceLog) {
+    public boolean isValidNID(String NID, StringBuilder traceLog) {
         traceLog.append("\n#Validating NID: ").append(NID).append("\n");
 
         // Check if NID is empty
@@ -435,5 +471,56 @@ public class IdentificationPresenter implements IdentificationPresenterInterface
 
         traceLog.append("NID is valid.\n");
         return true;
+    }
+
+    public boolean isValidPassport(String passport) {
+        // Example regex for generic passport validation
+        String regex = "^[A-Z0-9]{6,9}$";
+        return passport.matches(regex);
+    }
+
+    @Override
+    public void onValidateUserSuccess(String mobileNumber, String userName, String nationalId, String passportNumber) {
+        activationUseCase.setActivationModel(userName, mobileNumber, nationalId);
+
+        currentStep = currentStep.getNext();
+        new SharedPreferenceStorage(context).setUserName(userName);
+        identificationViewInterface.updateLayout(currentStep);
+    }
+
+    @Override
+    public void onFailure(String message) {
+        identificationViewInterface.showError(message);
+    }
+
+    @Override
+    public void onErrorMessage(String message) {
+        identificationViewInterface.showError(message);
+    }
+
+    @Override
+    public void onMobileSuccess() {
+//        currentStep = currentStep.getNext();
+//        identificationViewInterface.updateLayout(currentStep);
+
+    }
+
+    @Override
+    public void onOtpSentSuccess(String uuid) {
+        currentStep = currentStep.getNext();
+        identificationViewInterface.updateLayout(currentStep);
+    }
+
+    @Override
+    public void onOtpVerifiedSuccess() {
+        countTimer.cancelTimer();
+        currentStep = currentStep.getNext();
+        identificationViewInterface.updateLayout(currentStep);
+    }
+
+    @Override
+    public void onResendOtpSuccess(String message) {
+        identificationViewInterface.showToast(message);
+
     }
 }

@@ -44,15 +44,21 @@
                 android:text="@string/details_eToken"
                 android:textColor="@color/textGray"
                 android:textSize="@dimen/small_font" />
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
         </LinearLayout>
     </LinearLayout>
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="@dimen/xl_padding"
         android:layout_marginTop="@dimen/xl_padding"
         android:background="@android:color/white">
         <View
@@ -174,5 +180,5 @@
             android:background="@color/textGray"
             android:layout_marginVertical="8dp" />
     </LinearLayout>
-
+    </ScrollView>
 </LinearLayout>

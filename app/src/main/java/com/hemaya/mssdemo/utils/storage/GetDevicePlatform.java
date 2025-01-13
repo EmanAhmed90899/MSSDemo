@@ -2,7 +2,6 @@ package com.hemaya.mssdemo.utils.storage;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -23,16 +22,11 @@ public class GetDevicePlatform {
     public String getFingerPrint() {
         String fingerprint;
         try {
-            if (new SharedPreferenceStorage(context).getPlatformFingerPrint() != null) {
-                fingerprint = new SharedPreferenceStorage(context).getPlatformFingerPrint();
-            } else {
-                fingerprint = DeviceBinding.createDeviceBinding(context, DeviceBinding.FingerprintType.HARDWARE).fingerprint(generateSalt(64));
-                new SharedPreferenceStorage(context).setPlatformFingerPrint(fingerprint);
-            }
+            fingerprint = DeviceBinding.createDeviceBinding(context, DeviceBinding.FingerprintType.HARDWARE).fingerprint("uC3y5PLRbKwqXEF2TzJN6VBG1Dp9Ymo7A8RtW4xZHqvOULjfCiaMdQsTY0kXWbhT");
+
         } catch (DeviceBindingSDKException e) {
             throw new RuntimeException(e);
         }
-        Log.e("** Fingerprint **", fingerprint);
         return fingerprint;
 
     }
@@ -40,16 +34,13 @@ public class GetDevicePlatform {
 
     // Method to generate a salt string of the desired length
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public String generateSalt(int length) {
+    public static String generateSalt(int length) {
         // Create a SecureRandom instance
         SecureRandom secureRandom = new SecureRandom();
-
         // Create a byte array to hold the random values
         byte[] saltBytes = new byte[length];
-
         // Generate the random values
         secureRandom.nextBytes(saltBytes);
-
         // Convert the byte array to a Base64 encoded string
         return Base64.getEncoder().encodeToString(saltBytes);
     }

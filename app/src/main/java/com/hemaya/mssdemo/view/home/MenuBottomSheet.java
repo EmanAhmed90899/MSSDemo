@@ -1,5 +1,6 @@
 package com.hemaya.mssdemo.view.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,12 +18,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.hemaya.mssdemo.R;
 import com.hemaya.mssdemo.model.UserModel.UserViewModel;
 import com.hemaya.mssdemo.presenter.home.HomePresenterInterface;
+import com.hemaya.mssdemo.utils.langauge.LocaleHelper;
+import com.hemaya.mssdemo.utils.storage.SharedPreferenceStorage;
 import com.hemaya.mssdemo.utils.useCase.HomeUseCase;
 import com.hemaya.mssdemo.view.about.AboutView;
 import com.hemaya.mssdemo.view.change_language.ChangeLanguage;
 import com.hemaya.mssdemo.view.change_pin.ChangePinView;
 import com.hemaya.mssdemo.view.details.UserDetails;
 import com.hemaya.mssdemo.view.faqs.FAQSView;
+import com.hemaya.mssdemo.view.synchronize.SynchronizeView;
 
 public class MenuBottomSheet extends BottomSheetDialogFragment {
 
@@ -31,11 +35,12 @@ public class MenuBottomSheet extends BottomSheetDialogFragment {
     private Switch biometricSwitch;
     private HomeUseCase homeUseCase;
     private UserViewModel userViewModel;
-
-    public MenuBottomSheet(HomePresenterInterface homePresenter, HomeUseCase homeUseCase, UserViewModel userViewModel) {
+    private SharedPreferenceStorage sharedPreferenceStorage;
+    public MenuBottomSheet(Context context, HomePresenterInterface homePresenter, HomeUseCase homeUseCase, UserViewModel userViewModel) {
         this.homePresenter = homePresenter;
         this.homeUseCase = homeUseCase;
         this.userViewModel = userViewModel;
+        this.sharedPreferenceStorage = new SharedPreferenceStorage(context);
     }
 
     @Nullable
@@ -100,8 +105,15 @@ public class MenuBottomSheet extends BottomSheetDialogFragment {
         });
         languageLayout.setOnClickListener(v -> {
             dismiss();
-            Intent intent = new Intent(getContext(), ChangeLanguage.class);
-            getContext().startActivity(intent);
+            if(sharedPreferenceStorage.getLanguage().equals("en")){
+                LocaleHelper.setLocale(getContext(), "ar");
+                sharedPreferenceStorage.setLanguage("ar");}
+            else {
+                LocaleHelper.setLocale(getContext(), "en");
+                sharedPreferenceStorage.setLanguage("en");
+            }
+           homePresenter.recreate();
+
         });
 
         renameUserLayout.setOnClickListener(v -> {
@@ -111,7 +123,9 @@ public class MenuBottomSheet extends BottomSheetDialogFragment {
 
         resetTokenLayout.setOnClickListener(v -> {
             dismiss();
-            homePresenter.resetToken();
+            Intent intent = new Intent(getContext(), SynchronizeView.class);
+            getContext().startActivity(intent);
+//            homePresenter.resetToken();
         });
 
         deleteLayout.setOnClickListener(v -> {

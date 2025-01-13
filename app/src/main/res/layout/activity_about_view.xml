@@ -36,15 +36,26 @@
                 android:text="@string/aboutTitle"
                 android:textColor="@color/secondaryColor"
                 android:textSize="@dimen/medium_font" />
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/about_description"
-        android:textColor="@color/textGray"
-        android:textSize="@dimen/small_font" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:padding="@dimen/xl_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_description"
+            android:textColor="@color/textGray"
+            android:textAlignment="viewStart"
+            android:textSize="@dimen/medium_font" />
+    </ScrollView>
 
 </LinearLayout>

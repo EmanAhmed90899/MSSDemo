@@ -35,9 +35,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding"
                 android:layout_marginBottom="@dimen/padding"
-                android:text="@string/FAQsTextDescription"
+                android:text="@string/FAQsText"
                 android:textColor="@color/secondaryColor"
-                android:textSize="@dimen/medium_font" />
+                android:textSize="@dimen/small_font" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/FAQsTextDescription"
+                android:textColor="@color/textGray"
+                android:textSize="@dimen/small_font" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -54,26 +60,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="@dimen/large_padding"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/xl_padding"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/FAQsTextDescription"
-                    android:textColor="@color/textGray"
-                    android:textSize="@dimen/medium_font" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/large_padding"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_padding"
                 android:background="@drawable/border_layout"
                 android:orientation="vertical"
                 android:padding="@dimen/xl_padding">
@@ -83,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/Que1"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/large_font" />
+                    android:textSize="@dimen/small_font" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -91,14 +84,14 @@
                     android:layout_marginTop="@dimen/xl_padding"
                     android:text="@string/Ans1"
                     android:textColor="@color/textGray"
-                    android:textSize="@dimen/medium_font" />
+                    android:textSize="@dimen/small_font" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/large_padding"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_padding"
                 android:background="@drawable/border_layout"
                 android:orientation="vertical"
                 android:padding="@dimen/xl_padding">
@@ -108,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/Que2"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/large_font" />
+                    android:textSize="@dimen/small_font" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -116,14 +109,14 @@
                     android:layout_marginTop="@dimen/xl_padding"
                     android:text="@string/Ans2"
                     android:textColor="@color/textGray"
-                    android:textSize="@dimen/medium_font" />
+                    android:textSize="@dimen/small_font" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/large_padding"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_padding"
                 android:background="@drawable/border_layout"
                 android:orientation="vertical"
                 android:padding="@dimen/xl_padding">
@@ -133,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/Que3"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/large_font" />
+                    android:textSize="@dimen/small_font" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -141,7 +134,7 @@
                     android:layout_marginTop="@dimen/xl_padding"
                     android:text="@string/Ans3"
                     android:textColor="@color/textGray"
-                    android:textSize="@dimen/medium_font" />
+                    android:textSize="@dimen/small_font" />
 
             </LinearLayout>
         </LinearLayout>

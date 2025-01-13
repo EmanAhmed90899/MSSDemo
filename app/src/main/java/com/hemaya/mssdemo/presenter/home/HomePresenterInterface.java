@@ -14,4 +14,5 @@ public interface HomePresenterInterface {
     void showUserRename(HomeUseCase homeUseCase, UserViewModel userViewModel);
     void resetToken();
     void deleteToken(HomeUseCase homeUseCase);
+    void recreate();
 }

@@ -27,4 +27,19 @@ public class BasicAuthInterceptor implements Interceptor {
                 .build();
         return chain.proceed(authenticatedRequest);
     }
+
+    public static class AuthInterceptor implements Interceptor {
+
+
+        @NonNull
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+            Request authenticatedRequest = request.newBuilder()
+                    .header("Accept", "application/json")
+                    .build();
+            return chain.proceed(authenticatedRequest);
+        }
+    }
 }
+

@@ -11,21 +11,24 @@ import com.hemaya.mssdemo.view.identification.Step;
 
 public interface IdentificationPresenterInterface {
     void checkTerms();
-    void pressBack();
+    void pressBack(boolean isAddNewUser);
     Runnable timerFinished();
     boolean confirmTerms();
     boolean validateNationalId(EditText nationalId,EditText nationalIdConf,TextView messageErrorTxt);
     void validateOtp(TextView counterTxt);
 
+    boolean checkPermission();
     boolean pinValidation(EditText pin, EditText confirmPin, TextView messageErrorTxt);
-
+    void changeLang();
+    void resendOTP();
+    void showSettingDialog();
     void onTypingEditText(EditText editText);
     void onErrorEditText(EditText editText);
     void onEmptyEditText(EditText editText);
 
-    boolean validatePhone(String mobile,EditText phone, CountryCodePicker ccp, TextView messageErrorTxt);
+    boolean validatePhone(String region,String mobile,EditText phone, CountryCodePicker ccp, TextView messageErrorTxt);
 
-    void successOTP();
+    void successOTP(String otp);
 
     public void takePermission();
 

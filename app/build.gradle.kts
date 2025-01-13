@@ -46,11 +46,13 @@ dependencies {
     implementation(libs.kryo)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.ccp)
     implementation(libs.glide)
+    implementation(libs.phonelib)
     annotationProcessor(libs.glidecompiler)
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)

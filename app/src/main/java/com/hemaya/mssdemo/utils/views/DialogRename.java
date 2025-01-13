@@ -2,12 +2,12 @@ package com.hemaya.mssdemo.utils.views;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hemaya.mssdemo.R;
@@ -25,6 +25,7 @@ public class DialogRename {
     User user;
     private UserViewModel userViewModel;
     private AlertDialog dialog;
+    String name;
 
     public DialogRename(Context context, HomeUseCase homeUseCase, UserViewModel userViewModel) {
         this.context = context;
@@ -45,20 +46,22 @@ public class DialogRename {
         renameTitle = dialogView.findViewById(R.id.renameTitle);
         userNameEdit = dialogView.findViewById(R.id.edit_text_name);
         saveRename = dialogView.findViewById(R.id.saveRename);
+
+
         dialog = new AlertDialog.Builder(context)
                 .setView(dialogView)
                 .create();
+        name = user.getName();
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_background);
         setData();
+        applyGravityToAllEditTexts(userNameEdit);
 
         // Show the dialog
         dialog.show();
     }
 
     private void setData() {
-        if (new SharedPreferenceStorage(context).getLanguage().equals("ar")) {
-            userNameEdit.setGravity(Gravity.END);
-        }
+
         renameTitle.setText(context.getString(R.string.renameTitle) + " " + user.getName());
         userNameEdit.setText(user.getName());
         onclick();
@@ -71,6 +74,17 @@ public class DialogRename {
             user.setName(userNameEdit.getText().toString());
             userViewModel.setUser(user);
             dialog.dismiss();
+            new GenericPopUp(context, context.getResources().getString(R.string.renameSuccess) + " " + name + " " + context.getResources().getString(R.string.to) + " " + user.getName() + " " + context.getResources().getString(R.string.successfully));
         });
+    }
+
+    private void applyGravityToAllEditTexts(EditText view) {
+
+        if (new SharedPreferenceStorage(context).equals("ar")) {
+            Log.d("** edittext", "applyGravityToAllEditTexts: ");
+            view.setGravity(Gravity.RIGHT);
+        } else {
+            view.setGravity(Gravity.LEFT);
+        }
     }
 }

@@ -12,7 +12,7 @@ import com.hemaya.mssdemo.R;
 import com.hemaya.mssdemo.utils.useCase.ChangePinUseCase;
 import com.hemaya.mssdemo.view.change_pin.ChangePinViewInterface;
 
-public class ChangePinPresenter {
+public class ChangePinPresenter implements ChangePinPresenterInterface {
     private ChangePinViewInterface view;
     private ChangePinUseCase useCase;
     private Context context;
@@ -23,18 +23,19 @@ public class ChangePinPresenter {
         this.context = context;
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
     public void changePin(String oldPin, String newPin, String repeatedNewPin) {
-        view.showProgress();
         if (oldPin.isEmpty() || newPin.isEmpty() || repeatedNewPin.isEmpty()) {
-            view.showErrorMessage(context.getResources().getString(R.string.pleaseFillAllFields));
+            view.showMessage(context.getResources().getString(R.string.pleaseFillAllFields));
         } else {
             if (oldPin.equals(newPin)) {
-                view.showErrorMessage(context.getResources().getString(R.string.oldPinandNewPinError));
+                view.showMessage(context.getResources().getString(R.string.oldPinandNewPinError));
             } else if (!newPin.equals(repeatedNewPin)) {
-                view.showErrorMessage(context.getResources().getString(R.string.newPinNotMatch));
+                view.showMessage(context.getResources().getString(R.string.newPinNotMatch));
             } else if (isSequential(newPin) || isRepeated(newPin)) {
-                view.showErrorMessage(context.getResources().getString(R.string.notValidPin));
+                view.showMessage(context.getResources().getString(R.string.notValidPin));
             } else {
                 useCase.changePin(oldPin, newPin);
             }

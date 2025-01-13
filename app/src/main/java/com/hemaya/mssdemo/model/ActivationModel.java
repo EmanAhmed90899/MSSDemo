@@ -31,6 +31,7 @@ public class ActivationModel {
     int cryptoApplicationIndex = DigipassSDKConstants.CRYPTO_APPLICATION_INDEX_APP_4;
     String platformFingerprint;
     String storageName;
+    String serialNumber;
 
     String instanceActivationMessage;
     StringBuilder pinBuilder;
@@ -39,6 +40,8 @@ public class ActivationModel {
     String signature;
 
     byte[] biometricKey;
+    String nationalId;
+    String phoneNumber;
 
     public static ActivationModel getInstance() {
         if (instance == null) {
@@ -47,6 +50,30 @@ public class ActivationModel {
         return instance;
     }
 
+    public void clear() {
+        name = null;
+        scannedImageData = null;
+        codeFormated = null;
+        credentialsData = null;
+        srpClientEphemeralKeyResponse = null;
+        dsappsrpEphemeralResponse = null;
+        srpSessionKeyResponse = null;
+        activationDataResponse = null;
+        encryptionKey = null;
+        multiDeviceLicenseActivationResponse = null;
+        clientServerTimeShift = 0;
+        jailbreakStatus = DigipassSDKConstants.JAILBREAK_STATUS_NA;
+        cryptoApplicationIndex = DigipassSDKConstants.CRYPTO_APPLICATION_INDEX_APP_4;
+        platformFingerprint = null;
+        storageName = null;
+        instanceActivationMessage = null;
+        pinBuilder = null;
+        password = null;
+        signature = null;
+        biometricKey = null;
+        nationalId = null;
+        phoneNumber = null;
+    }
 
 
     public void setName(String name) {
@@ -208,5 +235,30 @@ public class ActivationModel {
 
     public void setCryptoApplicationIndex(int cryptoApplicationIndex) {
         this.cryptoApplicationIndex = cryptoApplicationIndex;
+    }
+
+    public void setNationalId(String nationalId) {
+        this.nationalId = nationalId;
+    }
+
+    public String getNationalId() {
+        return nationalId;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
     }
 }

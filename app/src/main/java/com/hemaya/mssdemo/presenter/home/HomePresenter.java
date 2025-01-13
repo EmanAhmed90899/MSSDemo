@@ -11,7 +11,8 @@ import com.hemaya.mssdemo.model.UserModel.UserViewModel;
 import com.hemaya.mssdemo.model.synchronizeModel.SynchronizeResponse;
 import com.hemaya.mssdemo.network.ApiClient;
 import com.hemaya.mssdemo.network.ApiService;
-import com.hemaya.mssdemo.utils.storage.SaveInLocalStorage;
+import com.hemaya.mssdemo.network.domain.AuthData;
+import com.hemaya.mssdemo.network.interceptor.DynamicHeaderInterceptor;
 import com.hemaya.mssdemo.utils.storage.SharedPreferenceStorage;
 import com.hemaya.mssdemo.utils.storage.UserDatabaseHelper;
 import com.hemaya.mssdemo.utils.useCase.HomeUseCase;
@@ -20,30 +21,24 @@ import com.hemaya.mssdemo.utils.views.DialogRename;
 import com.hemaya.mssdemo.view.home.HomeView;
 import com.hemaya.mssdemo.view.home.HomeViewInterface;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class HomePresenter implements HomePresenterInterface {
     private HomeViewInterface view;
     private Context context;
     private UserDatabaseHelper userDatabaseHelper;
     private SharedPreferenceStorage sharedPreferenceStorage;
-    private ApiService apiService;
 
     public HomePresenter(HomeViewInterface view) {
         this.view = view;
         this.context = (HomeView) view;
         this.userDatabaseHelper = new UserDatabaseHelper((HomeView) view);
         this.sharedPreferenceStorage = new SharedPreferenceStorage(context);
-        apiService = ApiClient.getClient().create(ApiService.class);
 
     }
 
@@ -53,7 +48,6 @@ public class HomePresenter implements HomePresenterInterface {
         if (userDatabaseHelper.usersCount() > 1) {
             view.setMultipleUsers();
         }
-        Log.e("** name", "SecureStorage" + userDatabaseHelper.getAllUsers().toString());
     }
 
     @Override
@@ -66,22 +60,12 @@ public class HomePresenter implements HomePresenterInterface {
     public void setUser(User user) {
         User selectedUser = userDatabaseHelper.updateIsUsed(user.getId() + "", true);
         sharedPreferenceStorage.setUserId(selectedUser.getId() + "");
-        sharedPreferenceStorage.setPlatformFingerPrint(selectedUser.getPlatformFingerPrint());
         sharedPreferenceStorage.setStorageName(selectedUser.getStorageName());
-        SaveInLocalStorage saveInLocalStorage = new SaveInLocalStorage(context, user.getStorageName(), "");
-        Log.e("** name", user.getStorageName());
-        Log.e("** name", Arrays.toString(saveInLocalStorage.getByteData("staticVector")));
-
-
         getUser();
     }
 
     @Override
     public void addToken() {
-        userDatabaseHelper.updateIsUsed(sharedPreferenceStorage.getUserId(), false);
-        sharedPreferenceStorage.setUserId(null);
-        sharedPreferenceStorage.setPlatformFingerPrint(null);
-        sharedPreferenceStorage.setStorageName(null);
         view.goToActivation();
     }
 
@@ -93,7 +77,7 @@ public class HomePresenter implements HomePresenterInterface {
 
     @Override
     public void resetToken() {
-        Call<SynchronizeResponse> callSynchronize = apiService.synchronize();
+        Call<SynchronizeResponse> callSynchronize = getRetrofit(AuthData.generateHmac("[]")).synchronize();
         callSynchronize.enqueue(new Callback<SynchronizeResponse>() {
             @Override
             public void onResponse(Call<SynchronizeResponse> call, Response<SynchronizeResponse> response) {
@@ -101,9 +85,7 @@ public class HomePresenter implements HomePresenterInterface {
                     SynchronizeResponse synchronizeResponse = response.body();
                     if (synchronizeResponse != null) {
                         if (synchronizeResponse.getResultCodes().getStatusCode() == 0) {
-                            Log.e("** serverTimeShift", synchronizeResponse.getResult().getServerTime() + "");
-                            long currentTimeMillis = System.currentTimeMillis();
-                            convertEpochToDate(currentTimeMillis, synchronizeResponse.getResult().getServerTime());
+                            convertEpochToDate(synchronizeResponse.getResult().getServerTime());
 
                         }
                     }
@@ -122,25 +104,25 @@ public class HomePresenter implements HomePresenterInterface {
         new DeleteUserDialog(context, homeUseCase);
     }
 
-    public void convertEpochToDate(long currentTimeMillis, long epochSeconds) {
-        // Convert seconds to milliseconds
-        long timestampMillis = epochSeconds * 1000;
+    @Override
+    public void recreate() {
+        view.restart();
+    }
 
-        // Convert to Date object
-        Date date = new Date(timestampMillis);
-
-        // Format the Date
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC")); // Set timezone if needed
-        String formattedDate = sdf.format(date);
-
-        // Display the formatted date
-        System.out.println("Formatted Date: " + formattedDate);
-
+    public void convertEpochToDate(long epochSeconds) {
+        long currentEpochMillis = System.currentTimeMillis(); // Current time in milliseconds
+        long currentEpochSeconds = currentEpochMillis / 1000; // Convert to seconds if needed
 
         // Calculate the time shift (difference)
-        long timeShiftMillis = currentTimeMillis - timestampMillis;
+        long timeShiftMillis = currentEpochSeconds - epochSeconds;
         sharedPreferenceStorage.setTimeShift(timeShiftMillis);
     }
 
+    ApiService getRetrofit(String header) {
+        DynamicHeaderInterceptor headerInterceptor = new DynamicHeaderInterceptor(header,context);
+
+        Retrofit retrofit = ApiClient.getClient(header, context);
+        ApiService apiService = retrofit.create(ApiService.class);
+        return apiService;
+    }
 }

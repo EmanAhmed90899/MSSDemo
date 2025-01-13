@@ -3,14 +3,12 @@ package com.hemaya.mssdemo.utils.useCase;
 
 import static android.app.Activity.RESULT_OK;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -21,19 +19,25 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.google.gson.Gson;
 import com.hemaya.mssdemo.R;
 import com.hemaya.mssdemo.model.ActivationModel;
 import com.hemaya.mssdemo.model.activationData.Request.ActivationDataRequest;
 import com.hemaya.mssdemo.model.activationData.Response.ActivationDataResponse;
 import com.hemaya.mssdemo.model.ephemeral.request.DSAPPSRPEphemeralRequest;
 import com.hemaya.mssdemo.model.ephemeral.response.DSAPPSRPEphemeralResponse;
-import com.hemaya.mssdemo.model.mdlActivate.Response.MdlActivateResponse;
+import com.hemaya.mssdemo.model.identification.storeUserRequest.StoreUserRequest;
+import com.hemaya.mssdemo.model.identification.storeUserResponse.StoreUserResponse;
 import com.hemaya.mssdemo.model.mdlActivate.Request.MdlActivateRequest;
+import com.hemaya.mssdemo.model.mdlActivate.Response.MdlActivateResponse;
 import com.hemaya.mssdemo.model.mdlAddDevice.Request.MdlAddDeviceRequest;
 import com.hemaya.mssdemo.model.mdlAddDevice.Response.MdlAddDeviceResponse;
 import com.hemaya.mssdemo.model.synchronizeModel.SynchronizeResponse;
 import com.hemaya.mssdemo.network.ApiClient;
 import com.hemaya.mssdemo.network.ApiService;
+import com.hemaya.mssdemo.network.domain.AuthData;
+import com.hemaya.mssdemo.network.interceptor.DynamicHeaderInterceptor;
+import com.hemaya.mssdemo.presenter.synchronize.SynchronizePresenter;
 import com.hemaya.mssdemo.utils.storage.GenerateRandomToken;
 import com.hemaya.mssdemo.utils.storage.GetDevicePlatform;
 import com.hemaya.mssdemo.utils.storage.SVFFileReader;
@@ -42,14 +46,13 @@ import com.hemaya.mssdemo.utils.storage.SharedPreferenceStorage;
 import com.hemaya.mssdemo.utils.storage.UserDatabaseHelper;
 import com.hemaya.mssdemo.utils.views.GenericPopUp;
 import com.hemaya.mssdemo.utils.views.RequestPermissionDialog;
+import com.hemaya.mssdemo.utils.views.SettingPermissionDialog;
 import com.hemaya.mssdemo.view.home.HomeView;
 import com.vasco.digipass.sdk.DigipassSDK;
 import com.vasco.digipass.sdk.DigipassSDKReturnCodes;
 import com.vasco.digipass.sdk.responses.ActivationResponse;
 import com.vasco.digipass.sdk.responses.GenerationResponse;
 import com.vasco.digipass.sdk.responses.SecureChannelParseResponse;
-import com.vasco.digipass.sdk.utils.biometricsensor.BiometricSensorSDK;
-import com.vasco.digipass.sdk.utils.biometricsensor.BiometricSensorSDKException;
 import com.vasco.digipass.sdk.utils.qrcodescanner.QRCodeScannerSDKActivity;
 import com.vasco.digipass.sdk.utils.qrcodescanner.QRCodeScannerSDKConstants;
 import com.vasco.dsapp.client.DSAPPClient;
@@ -58,7 +61,7 @@ import com.vasco.message.client.CredentialsData;
 import com.vasco.message.client.SecureMessagingSDKClient;
 import com.vasco.message.exception.SecureMessagingSDKException;
 
-
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
@@ -69,6 +72,7 @@ import java.util.TimeZone;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 public class ActivationUseCase {
@@ -80,7 +84,6 @@ public class ActivationUseCase {
 
 
     private ActivityResultLauncher<Intent> activityResultLauncher;
-    ApiService apiService;
 
     SharedPreferenceStorage sharedPreferenceStorage;
     SaveInLocalStorage saveInLocalStorage;
@@ -88,12 +91,19 @@ public class ActivationUseCase {
     SetResult setResult;
     UserDatabaseHelper userDatabaseHelper;
 
+    String instanceActivationMessage;
+    Gson gson;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public ActivationUseCase(Context context) {
         this.context = context;
-        this.setResult = (SetResult) context;
+        gson = new Gson();
 
         init();
+    }
+
+    public void setSetResult(SetResult setResult) {
+        this.setResult = setResult;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -101,17 +111,18 @@ public class ActivationUseCase {
         requestPermissionDialog = new RequestPermissionDialog(context);
         requestPermissionDialog.init();
 
+//        if (activationModel == null) {
         activationModel = ActivationModel.getInstance();
+//        }
 
         sharedPreferenceStorage = new SharedPreferenceStorage(context);
-        apiService = ApiClient.getClient().create(ApiService.class);
 
-//        activationModel.setPlatformFingerprint(new GetDevicePlatform(context).getFingerPrint());
 
         getSecureStorageName();
-        saveInLocalStorage = new SaveInLocalStorage(context, sharedPreferenceStorage.getStorageName(), "");
+        saveInLocalStorage = new SaveInLocalStorage(context, sharedPreferenceStorage.getStorageName());
         userDatabaseHelper = new UserDatabaseHelper(context);
         activationModel.setPlatformFingerprint(new GetDevicePlatform(context).getFingerPrint());
+
 
         activityResultLauncher = ((AppCompatActivity) context).registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -128,30 +139,41 @@ public class ActivationUseCase {
 
                 }
         );
-        if (sharedPreferenceStorage.getTimeShift() == -1) {
-            resetToken();
-        }
+        resetToken(null);
+//
 
     }
 
-    public void setUserName(String name) {
+    public void setActivationModel(String name, String mobile, String national) {
         activationModel.setName(name);
+        activationModel.setPhoneNumber(mobile);
+        activationModel.setNationalId(national);
     }
+
+    public void redirectToSettings() {
+        new SettingPermissionDialog(context).show();
+    }
+
+
 
     public void getSecureStorageName() {
-        if (sharedPreferenceStorage.getStorageName() == null) {
+//        if (sharedPreferenceStorage.getStorageName() == null) {
             activationModel.setStorageName("SecureStorage" + new GenerateRandomToken().generateToken(5));
             sharedPreferenceStorage.setStorageName(activationModel.getStorageName());
-        } else {
-            activationModel.setStorageName(sharedPreferenceStorage.getStorageName());
-        }
+//        } else {
+//            activationModel.setStorageName(sharedPreferenceStorage.getStorageName());
+//        }
     }
 
     // Method to request permission
     public void takePermission() {
-        if (checkCameraPermission() || checkPhoneStatePermission()) {
+        if (checkCameraPermission() || checkPhoneStatePermission() || checkReadSmsPermission() || checkReceiveSmsPermission()) {
             requestPermissionDialog.create();
         }
+    }
+
+    public boolean checkAllPermission() {
+        return checkCameraPermission() || checkPhoneStatePermission() || checkReadSmsPermission() || checkReceiveSmsPermission();
     }
 
     private boolean checkCameraPermission() {
@@ -161,6 +183,16 @@ public class ActivationUseCase {
 
     private boolean checkPhoneStatePermission() {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED;
+
+    }
+
+    private boolean checkReadSmsPermission() {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED;
+
+    }
+
+    private boolean checkReceiveSmsPermission() {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED;
 
     }
 
@@ -193,16 +225,17 @@ public class ActivationUseCase {
         if (activationModel.getScannedImageData().isEmpty()) {
             setResult.showToast(context.getResources().getString(R.string.no_data_decrypt));
         } else {
-            setResult.showProgress();
+            setResult.showLayoutLoading();
             try {
                 activationModel.setCredentialsData(SecureMessagingSDKClient.parseCredentialsMessage(activationModel.getScannedImageData()));
-                if (!activationModel.getName().equals(activationModel.getCredentialsData().getUserIdentifier())) {
+//                if (!activationModel.getName().equals(activationModel.getCredentialsData().getUserIdentifier())) {
 
-                    new GenericPopUp(context, context.getString(R.string.error), context.getResources().getString(R.string.errorName)).showCustomPopup();
+//                    new GenericPopUp(context, context.getResources().getString(R.string.errorName)).showCustomPopup();
 
-                } else {
+//                }
+//            else {
                     ValidateSRPUserPasswordChecksum(activationModel.getCredentialsData().getActivationPassword(), null);
-                }
+//                }
             } catch (SecureMessagingSDKException e) {
                 setResult.showToast(e.getMessage());
                 setResult.hideProgress();
@@ -213,11 +246,9 @@ public class ActivationUseCase {
     }
 
     public void manualActivation(String activationCode, String password, TextView messageErrorTxt) {
-
         setResult.showProgress();
         activationModel.setCredentialsData(new CredentialsData(0, activationCode, "", password, ""));
         ValidateSRPUserPasswordChecksum(activationModel.getCredentialsData().getActivationPassword(), messageErrorTxt);
-        Log.e("** ActivationCode", activationCode);
 
     }
 
@@ -228,7 +259,7 @@ public class ActivationUseCase {
         } catch (DSAPPException e) {
             setResult.hideProgress();
             if (messageErrorTxt != null)
-                messageErrorTxt.setText(e.getMessage());
+                new GenericPopUp(context, context.getResources().getString(R.string.errorUser)).showCustomPopup();
         }
     }
 
@@ -245,28 +276,34 @@ public class ActivationUseCase {
     }
 
     private void generateEphemeralCall() {
-        Call<DSAPPSRPEphemeralResponse> dsappsrpEphemeralResponseCall = apiService.generateEphemeralKey(new DSAPPSRPEphemeralRequest(activationModel.getCredentialsData().getRegistrationIdentifier(), activationModel.getSrpClientEphemeralKeyResponse().getClientEphemeralPublicKey()));
+        Log.e("** RegistrationIdentifier", activationModel.getCredentialsData().getRegistrationIdentifier());
+        Log.e("** ClientEphemeralPublicKey", activationModel.getSrpClientEphemeralKeyResponse().getClientEphemeralPublicKey());
+        DSAPPSRPEphemeralRequest dsappsrpEphemeralRequest = new DSAPPSRPEphemeralRequest(activationModel.getCredentialsData().getRegistrationIdentifier(), activationModel.getSrpClientEphemeralKeyResponse().getClientEphemeralPublicKey());
+        String jsonString = gson.toJson(dsappsrpEphemeralRequest);
+
+        Call<DSAPPSRPEphemeralResponse> dsappsrpEphemeralResponseCall = getRetrofit(AuthData.generateHmac(jsonString)).generateEphemeralKey(dsappsrpEphemeralRequest);
         dsappsrpEphemeralResponseCall.enqueue(new Callback<DSAPPSRPEphemeralResponse>() {
             @Override
             public void onResponse(Call<DSAPPSRPEphemeralResponse> call, Response<DSAPPSRPEphemeralResponse> response) {
+                Log.e("** Response", response.body().toString());
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         activationModel.setDsappsrpEphemeralResponse(response.body());
                         try {
                             if (activationModel.getDsappsrpEphemeralResponse().getResult() == null) {
                                 setResult.hideProgress();
-                                new GenericPopUp(context, activationModel.getDsappsrpEphemeralResponse().getResultCodes().getStatusCode() + "", activationModel.getDsappsrpEphemeralResponse().getResultCodes().getStatusCodeEnum()).showCustomPopup();
+                                new GenericPopUp(context, context.getString(R.string.invalidActivtionData)).showCustomPopup();
                             } else {
                                 activationModel.setSrpSessionKeyResponse(DSAPPClient.generateSRPSessionKey(activationModel.getSrpClientEphemeralKeyResponse().getClientEphemeralPublicKey(), activationModel.getSrpClientEphemeralKeyResponse().getClientEphemeralPrivateKey(), activationModel.getDsappsrpEphemeralResponse().getResult().getServerEphemeralPublicKey(), activationModel.getCredentialsData().getRegistrationIdentifier(), activationModel.getCredentialsData().getActivationPassword(), activationModel.getDsappsrpEphemeralResponse().getResult().getSalt()));
                                 GenerateActivationDate();
                             }
                         } catch (DSAPPException e) {
-                            new GenericPopUp(context, context.getString(R.string.error), e.getMessage()).showCustomPopup();
+                            new GenericPopUp(context, context.getResources().getString(R.string.something_went_wrong)).showCustomPopup();
                             setResult.hideProgress();
 
                         }
                     } else {
-                        new GenericPopUp(context, "generateEphemeral " + context.getString(R.string.error), context.getString(R.string.something_went_wrong)).showCustomPopup();
+                        new GenericPopUp(context,  context.getString(R.string.something_went_wrong)).showCustomPopup();
                         setResult.hideProgress();
                     }
                 }
@@ -274,41 +311,42 @@ public class ActivationUseCase {
 
             @Override
             public void onFailure(Call<DSAPPSRPEphemeralResponse> call, Throwable t) {
-                new GenericPopUp(context, context.getString(R.string.error), context.getString(R.string.invalidActivtionData)).showCustomPopup();
+
+                new GenericPopUp(context, context.getString(R.string.invalidActivtionData)).showCustomPopup();
                 setResult.hideProgress();
 
             }
         });
     }
 
-
     private void GenerateActivationDate() {
-        Call<ActivationDataResponse> activationDataResponseCall = apiService.generateActivationData(new ActivationDataRequest(activationModel.getCredentialsData().getRegistrationIdentifier(), activationModel.getSrpSessionKeyResponse().getClientEvidenceMessage()));
+        ActivationDataRequest activationDataRequest = new ActivationDataRequest(activationModel.getCredentialsData().getRegistrationIdentifier(), activationModel.getSrpSessionKeyResponse().getClientEvidenceMessage());
+        String jsonString = gson.toJson(activationDataRequest);
+
+        Call<ActivationDataResponse> activationDataResponseCall = getRetrofit(AuthData.generateHmac(jsonString)).generateActivationData(activationDataRequest);
         activationDataResponseCall.enqueue(new Callback<ActivationDataResponse>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Call<ActivationDataResponse> call, Response<ActivationDataResponse> response) {
                 if (response.isSuccessful()) {
-                    Log.e("*** ACTIVATION DATA", response.body().toString());
                     if (response.body() != null) {
                         activationModel.setActivationDataResponse(response.body());
                         if (activationModel.getActivationDataResponse().getResult() == null) {
-                            new GenericPopUp(context, activationModel.getActivationDataResponse().getResultCodes().getStatusCode() + "", activationModel.getActivationDataResponse().getResultCodes().getStatusCodeEnum()).showCustomPopup();
+                            new GenericPopUp(context, context.getResources().getString(R.string.invalidActivtionData)).showCustomPopup();
                             setResult.hideProgress();
                         } else {
                             try {
-                                Log.e("** ActivationData", activationModel.getActivationDataResponse().getResult().getEncryptedLicenseActivationMessage());
                                 activationModel.setEncryptionKey(DSAPPClient.decryptSRPData(activationModel.getSrpSessionKeyResponse().getSessionKey(), activationModel.getActivationDataResponse().getResult().getEncryptedLicenseActivationMessage(), activationModel.getActivationDataResponse().getResult().getEncryptedCounter(), activationModel.getActivationDataResponse().getResult().getMac()));
                                 MultiDeviceActivateLicense();
                             } catch (DSAPPException e) {
                                 setResult.showToast(e.getMessage());
                                 setResult.hideProgress();
-                                new GenericPopUp(context, context.getString(R.string.error), e.getMessage()).showCustomPopup();
+                                new GenericPopUp(context, e.getMessage()).showCustomPopup();
                             }
                         }
 
                     } else {
-                        new GenericPopUp(context, "GenerateActivationDate" + context.getString(R.string.error), context.getString(R.string.something_went_wrong)).showCustomPopup();
+                        new GenericPopUp(context,  context.getString(R.string.something_went_wrong)).showCustomPopup();
                         setResult.hideProgress();
 
                     }
@@ -317,7 +355,7 @@ public class ActivationUseCase {
 
             @Override
             public void onFailure(Call<ActivationDataResponse> call, Throwable t) {
-                new GenericPopUp(context, context.getString(R.string.error), t.getMessage()).showCustomPopup();
+                new GenericPopUp(context,  context.getString(R.string.something_went_wrong)).showCustomPopup();
                 setResult.hideProgress();
 
             }
@@ -331,25 +369,23 @@ public class ActivationUseCase {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private String MultiDeviceActivateLicense() {
-        Log.e("** EncryptionKey", new String(activationModel.getEncryptionKey(), StandardCharsets.UTF_8));
         SecureChannelParseResponse secureChannelParseResponse = getSecureChannelParseResponse(new String(activationModel.getEncryptionKey(), StandardCharsets.UTF_8));
         String message = "";
         if (secureChannelParseResponse.getReturnCode() != DigipassSDKReturnCodes.SUCCESS) {
-            Log.e("** SecureChannelParseResponse", secureChannelParseResponse.getReturnCode() + "");
             message += "Parse secure channel message FAILED - [ " + secureChannelParseResponse.getReturnCode() + ": " + DigipassSDK.getMessageForReturnCode(secureChannelParseResponse.getReturnCode()) + " ]\n";
-            new GenericPopUp(context, context.getString(R.string.error), message).showCustomPopup();
+            new GenericPopUp(context, message).showCustomPopup();
             return message;
         }
 
         try {
             activationModel.setMultiDeviceLicenseActivationResponse(DigipassSDK.multiDeviceActivateLicense(secureChannelParseResponse.getMessage(), readStaticVector(), activationModel.getPlatformFingerprint(), activationModel.getJailbreakStatus(), activationModel.getClientServerTimeShift()));
         } catch (Exception e) {
-            new GenericPopUp(context, context.getString(R.string.error), e.getMessage()).showCustomPopup();
+            new GenericPopUp(context, e.getMessage()).showCustomPopup();
         }
 
         if (activationModel.getMultiDeviceLicenseActivationResponse().getReturnCode() != DigipassSDKReturnCodes.SUCCESS) {
             message += "Multi-device license activation FAILED - [ " + activationModel.getMultiDeviceLicenseActivationResponse().getReturnCode() + ": " + DigipassSDK.getMessageForReturnCode(activationModel.getMultiDeviceLicenseActivationResponse().getReturnCode()) + " ]\n";
-            new GenericPopUp(context, context.getString(R.string.error), message).showCustomPopup();
+            new GenericPopUp(context, message).showCustomPopup();
 
             return message;
         }
@@ -362,7 +398,10 @@ public class ActivationUseCase {
     }
 
     private void addMDLDevice() {
-        Call<MdlAddDeviceResponse> mdlAddDeviceResponseCall = apiService.addDeviceMDL(new MdlAddDeviceRequest(activationModel.getCredentialsData().getRegistrationIdentifier(), "", activationModel.getMultiDeviceLicenseActivationResponse().getDeviceCode()));
+        MdlAddDeviceRequest mdlAddDeviceRequest = new MdlAddDeviceRequest(activationModel.getCredentialsData().getRegistrationIdentifier(), "description", activationModel.getMultiDeviceLicenseActivationResponse().getDeviceCode());
+        String jsonString = gson.toJson(mdlAddDeviceRequest);
+
+        Call<MdlAddDeviceResponse> mdlAddDeviceResponseCall = getRetrofit(AuthData.generateHmac(jsonString)).addDeviceMDL(mdlAddDeviceRequest);
         mdlAddDeviceResponseCall.enqueue(new Callback<MdlAddDeviceResponse>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -370,29 +409,29 @@ public class ActivationUseCase {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.body().getResult() == null) {
-                            new GenericPopUp(context, response.body().getResultCodes().getStatusCode() + "", response.body().getResultCodes().getStatusCodeEnum()).showCustomPopup();
+                            new GenericPopUp(context,  context.getString(R.string.invalidActivtionData)).showCustomPopup();
                             setResult.hideProgress();
 
                         } else {
-                            sharedPreferenceStorage.setRegistrationId(activationModel.getCredentialsData().getRegistrationIdentifier());
 
 //                            if (sharedPreferenceStorage.getUserId() != null) {
 //                                enableBiometric();
 //                            } else {
                             activationModel.setInstanceActivationMessage(response.body().getResult().getInstanceActivationMessage());
-                            sharedPreferenceStorage.setMessageInstance(response.body().getResult().getInstanceActivationMessage());
+                            instanceActivationMessage = (response.body().getResult().getInstanceActivationMessage());
                             setResult.hideProgress();
                             setResult.showCongratulation();
 //                            }
 
                         }
                     } else {
-                        new GenericPopUp(context, context.getString(R.string.error), context.getString(R.string.something_went_wrong)).showCustomPopup();
+                        new GenericPopUp(context, context.getString(R.string.something_went_wrong)).showCustomPopup();
                         setResult.hideProgress();
 
                     }
                 } else {
-                    new GenericPopUp(context, "AddMDLDevice" + context.getString(R.string.error), context.getString(R.string.something_went_wrong)).showCustomPopup();
+
+                    new GenericPopUp(context, context.getString(R.string.something_went_wrong)).showCustomPopup();
                     setResult.hideProgress();
 
                 }
@@ -400,7 +439,7 @@ public class ActivationUseCase {
 
             @Override
             public void onFailure(Call<MdlAddDeviceResponse> call, Throwable t) {
-                new GenericPopUp(context, context.getString(R.string.error), t.getMessage()).showCustomPopup();
+                new GenericPopUp(context,  context.getString(R.string.something_went_wrong)).showCustomPopup();
                 setResult.hideProgress();
 
             }
@@ -409,41 +448,33 @@ public class ActivationUseCase {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String MultiDeviceActivationInstance(String password) {
-        Log.e("** Password", password);
 //        activationModel.setPassword(password);
         setResult.showProgress();
-        Log.e("** SecureChannel", sharedPreferenceStorage.getMessageInstance());
 
-        SecureChannelParseResponse secureChannelParseResponse = getSecureChannelParseResponse(sharedPreferenceStorage.getMessageInstance());
+        SecureChannelParseResponse secureChannelParseResponse = getSecureChannelParseResponse(instanceActivationMessage);
         String message = "";
         if (secureChannelParseResponse.getReturnCode() != DigipassSDKReturnCodes.SUCCESS) {
             message += "Parse secure channel message FAILED - [ " + secureChannelParseResponse.getReturnCode() + ": " + DigipassSDK.getMessageForReturnCode(
                     secureChannelParseResponse.getReturnCode()
             ) + " ]\n";
-            new GenericPopUp(context, context.getString(R.string.error), message).showCustomPopup();
+            new GenericPopUp(context, message).showCustomPopup();
             setResult.hideProgress();
 
 
             return message;
         } else {
-            Log.e("** StaticVector", Arrays.toString(saveInLocalStorage.getByteData("staticVector")));
-            Log.e("** DynamicVector", Arrays.toString(saveInLocalStorage.getByteData("dynamicVector")));
-            Log.e("** PlatformFingerPrint", sharedPreferenceStorage.getPlatformFingerPrint());
-            Log.e("** Password set", password);
-            ActivationResponse activationResponse = DigipassSDK.multiDeviceActivateInstance(saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), secureChannelParseResponse.getMessage(), password, sharedPreferenceStorage.getPlatformFingerPrint());
+
+            ActivationResponse activationResponse = DigipassSDK.multiDeviceActivateInstance(saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), secureChannelParseResponse.getMessage(), password, activationModel.getPlatformFingerprint());
 
             if (activationResponse.getReturnCode() != DigipassSDKReturnCodes.SUCCESS) {
                 message += "Multi-device instance activation FAILED - [ " + activationResponse.getReturnCode() + ": " + DigipassSDK.getMessageForReturnCode(activationResponse.getReturnCode()) + " ]\n";
-                new GenericPopUp(context, context.getString(R.string.error), message).showCustomPopup();
+                new GenericPopUp(context, message).showCustomPopup();
                 setResult.hideProgress();
 
 
                 return message;
             } else {
                 byte[] dynamicVectorResponse = activationResponse.getDynamicVector();
-                Log.e("** DynamicVector", Arrays.toString(dynamicVectorResponse));
-                Log.e("** StaticVectore", Arrays.toString(activationResponse.getStaticVector()));
-
                 saveInLocalStorage.saveByteData("dynamicVector", dynamicVectorResponse);
                 generateSignatureFromSecureChannelMessage(secureChannelParseResponse, password);
 
@@ -457,29 +488,27 @@ public class ActivationUseCase {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String MultiDeviceActivationInstanceWithKey() {
         setResult.showProgress();
-        SecureChannelParseResponse secureChannelParseResponse = getSecureChannelParseResponse(sharedPreferenceStorage.getMessageInstance());
+        SecureChannelParseResponse secureChannelParseResponse = getSecureChannelParseResponse(instanceActivationMessage);
         String message = "";
         if (secureChannelParseResponse.getReturnCode() != DigipassSDKReturnCodes.SUCCESS) {
             message += "Parse secure channel message FAILED - [ " + secureChannelParseResponse.getReturnCode() + ": " + DigipassSDK.getMessageForReturnCode(
                     secureChannelParseResponse.getReturnCode()
             ) + " ]\n";
-            new GenericPopUp(context, context.getString(R.string.error), message).showCustomPopup();
+            new GenericPopUp(context, message).showCustomPopup();
             setResult.hideProgress();
             return message;
         }
-        ActivationResponse activationResponse = DigipassSDK.multiDeviceActivateInstanceWithKey(saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), secureChannelParseResponse.getMessage(), saveInLocalStorage.getByteData("biometricKey"), sharedPreferenceStorage.getPlatformFingerPrint());
+        ActivationResponse activationResponse = DigipassSDK.multiDeviceActivateInstanceWithKey(saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), secureChannelParseResponse.getMessage(), saveInLocalStorage.getByteData("biometricKey"), activationModel.getPlatformFingerprint());
 
         if (activationResponse.getReturnCode() != DigipassSDKReturnCodes.SUCCESS) {
             message += "Multi-device instance activation FAILED - [ " + activationResponse.getReturnCode() + ": " + DigipassSDK.getMessageForReturnCode(activationResponse.getReturnCode()) + " ]\n";
-            new GenericPopUp(context, context.getString(R.string.error), message).showCustomPopup();
+            new GenericPopUp(context, message).showCustomPopup();
             setResult.hideProgress();
 
             return message;
 
         }
         byte[] dynamicVectorResponse = activationResponse.getDynamicVector();
-        Log.e("** DynamicVector", Arrays.toString(dynamicVectorResponse));
-        Log.e("** StaticVectore", Arrays.toString(activationResponse.getStaticVector()));
         saveInLocalStorage.saveByteData("dynamicVector", dynamicVectorResponse);
         generateSignatureFromSecureChannelMessageWithKey(secureChannelParseResponse);
         return message;
@@ -490,11 +519,11 @@ public class ActivationUseCase {
     public String generateSignatureFromSecureChannelMessage(SecureChannelParseResponse secureChannelParseResponse, String password) {
 
         String message = "";
-        GenerationResponse generationResponse = DigipassSDK.generateSignatureFromSecureChannelMessage(saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), secureChannelParseResponse.getMessage(), password, activationModel.getClientServerTimeShift(), activationModel.getCryptoApplicationIndex(), sharedPreferenceStorage.getPlatformFingerPrint());
+        GenerationResponse generationResponse = DigipassSDK.generateSignatureFromSecureChannelMessage(saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), secureChannelParseResponse.getMessage(), password, activationModel.getClientServerTimeShift(), activationModel.getCryptoApplicationIndex(), activationModel.getPlatformFingerprint());
 
         if (generationResponse.getReturnCode() != DigipassSDKReturnCodes.SUCCESS) {
             message += "Generate signature from secure channel message FAILED - [ " + generationResponse.getReturnCode() + ": " + DigipassSDK.getMessageForReturnCode(generationResponse.getReturnCode()) + " ]";
-            new GenericPopUp(context, context.getString(R.string.error), message).showCustomPopup();
+            new GenericPopUp(context, message).showCustomPopup();
             setResult.hideProgress();
 
             return message;
@@ -512,11 +541,11 @@ public class ActivationUseCase {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String generateSignatureFromSecureChannelMessageWithKey(SecureChannelParseResponse secureChannelParseResponse) {
         String message = "";
-        GenerationResponse generationResponse = DigipassSDK.generateSignatureFromSecureChannelMessageWithKey(saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), secureChannelParseResponse.getMessage(), saveInLocalStorage.getByteData("biometricKey"), activationModel.getClientServerTimeShift(), activationModel.getCryptoApplicationIndex(), sharedPreferenceStorage.getPlatformFingerPrint());
+        GenerationResponse generationResponse = DigipassSDK.generateSignatureFromSecureChannelMessageWithKey(saveInLocalStorage.getByteData("staticVector"), saveInLocalStorage.getByteData("dynamicVector"), secureChannelParseResponse.getMessage(), saveInLocalStorage.getByteData("biometricKey"), activationModel.getClientServerTimeShift(), activationModel.getCryptoApplicationIndex(), activationModel.getPlatformFingerprint());
 
         if (generationResponse.getReturnCode() != DigipassSDKReturnCodes.SUCCESS) {
             message += "Generate signature from secure channel message FAILED - [ " + generationResponse.getReturnCode() + ": " + DigipassSDK.getMessageForReturnCode(generationResponse.getReturnCode()) + " ]";
-            new GenericPopUp(context, context.getString(R.string.error), message).showCustomPopup();
+            new GenericPopUp(context, message).showCustomPopup();
             setResult.hideProgress();
 
 
@@ -530,7 +559,10 @@ public class ActivationUseCase {
     }
 
     private void MdlActivate(boolean isBiometric) {
-        Call<MdlActivateResponse> mdlActivateResponseCall = apiService.activateMDL(new MdlActivateRequest(sharedPreferenceStorage.getRegistrationId(), activationModel.getSignature()));
+        MdlActivateRequest mdlActivateRequest = new MdlActivateRequest(activationModel.getCredentialsData().getRegistrationIdentifier(), activationModel.getSignature());
+        String jsonString = gson.toJson(mdlActivateRequest);
+
+        Call<MdlActivateResponse> mdlActivateResponseCall = getRetrofit(AuthData.generateHmac(jsonString)).activateMDL(mdlActivateRequest);
         mdlActivateResponseCall.enqueue(new Callback<MdlActivateResponse>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -538,22 +570,21 @@ public class ActivationUseCase {
                 setResult.hideProgress();
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        Log.e("** MDLActivate", response.body().toString());
-//                        if (isBiometric) {
-//                            userDatabaseHelper.addUserBiometric(Integer.parseInt(sharedPreferenceStorage.getUserId()), sharedPreferenceStorage.getPlatformFingerPrint(), response.body().getResult().getSerialNumber(), sharedPreferenceStorage.getStorageName(), false);
-//                        } else {
+                        Log.e("** Response", response.body().toString());
+                        Log.e("** actvation", activationModel.getName());
+//                        activationModel.setUserName("test2_user");
                         if (activationModel.getName().equals(response.body().getResult().getUserID())) {
-                            long id = userDatabaseHelper.addUser(sharedPreferenceStorage.getPlatformFingerPrint(), response.body().getResult().getSerialNumber(), response.body().getResult().getSerialNumber(), true, sharedPreferenceStorage.getStorageName());
-                            sharedPreferenceStorage.setRegistrationId(null);
-                            sharedPreferenceStorage.setMessageInstance(null);
+                            activationModel.setSerialNumber(response.body().getResult().getSerialNumber());
+                            long id = userDatabaseHelper.addUser(activationModel.getPlatformFingerprint(), response.body().getResult().getSerialNumber(), response.body().getResult().getSerialNumber(), true, sharedPreferenceStorage.getStorageName());
+                            storeUser();
+                            sharedPreferenceStorage.setUserName("");
                             sharedPreferenceStorage.setUserId(id + "");
                             userDatabaseHelper.updateIsUsed(id + "", true);
                             Intent intent = new Intent(context, HomeView.class);
                             context.startActivity(intent);
                         } else {
-                            sharedPreferenceStorage.setRegistrationId(null);
-                            sharedPreferenceStorage.setMessageInstance(null);
-                            new GenericPopUp(context, "MDLActivate" + context.getString(R.string.error), context.getResources().getString(R.string.errorName)).showCustomPopup();
+                            sharedPreferenceStorage.setUserName("");
+                            new GenericPopUp(context, context.getResources().getString(R.string.errorName)).showCustomPopup();
                         }
 
 //                        }
@@ -569,13 +600,15 @@ public class ActivationUseCase {
 
 
                     }
+                }else{
+                    new GenericPopUp(context,  context.getString(R.string.something_went_wrong)).showCustomPopup();
                 }
             }
 
             @Override
             public void onFailure(Call<MdlActivateResponse> call, Throwable t) {
                 setResult.hideProgress();
-                new GenericPopUp(context, "MDLActivate" + context.getString(R.string.error), t.getMessage()).showCustomPopup();
+                new GenericPopUp(context,  context.getString(R.string.something_went_wrong)).showCustomPopup();
             }
         });
     }
@@ -600,8 +633,8 @@ public class ActivationUseCase {
         return byteArray;
     }
 
-    public void resetToken() {
-        Call<SynchronizeResponse> callSynchronize = apiService.synchronize();
+    public void resetToken(SynchronizePresenter viewInterface) {
+        Call<SynchronizeResponse> callSynchronize = getRetrofit(AuthData.generateHmac("[]")).synchronize();
         callSynchronize.enqueue(new Callback<SynchronizeResponse>() {
             @Override
             public void onResponse(Call<SynchronizeResponse> call, Response<SynchronizeResponse> response) {
@@ -612,7 +645,7 @@ public class ActivationUseCase {
                             Log.e("** serverTimeShift", synchronizeResponse.getResult().getServerTime() + "");
                             long currentTimeMillis = System.currentTimeMillis();
 
-                            convertEpochToDate(currentTimeMillis, synchronizeResponse.getResult().getServerTime());
+                            convertEpochToDate(viewInterface, currentTimeMillis, synchronizeResponse.getResult().getServerTime());
 
 
                         }
@@ -622,12 +655,21 @@ public class ActivationUseCase {
 
             @Override
             public void onFailure(Call<SynchronizeResponse> call, Throwable t) {
-                Log.e("** error", t.getMessage());
+                if (viewInterface != null) {
+                    viewInterface.onError(t.getMessage());
+                }
             }
         });
     }
 
-    public void convertEpochToDate(long currentTimeMillis, long epochSeconds) {
+    ApiService getRetrofit(String header) {
+        DynamicHeaderInterceptor headerInterceptor = new DynamicHeaderInterceptor(header, context);
+        Retrofit retrofit = ApiClient.getClient(header, context);
+        ApiService apiService = retrofit.create(ApiService.class);
+        return apiService;
+    }
+
+    public void convertEpochToDate(SynchronizePresenter viewInterface, long currentTimeMillis, long epochSeconds) {
         // Convert seconds to milliseconds
         long timestampMillis = epochSeconds * 1000;
 
@@ -647,18 +689,55 @@ public class ActivationUseCase {
         // Calculate the time shift (difference)
         long timeShiftMillis = currentTimeMillis - timestampMillis;
         sharedPreferenceStorage.setTimeShift(timeShiftMillis);
+        if (viewInterface != null) {
+            viewInterface.onSuccess(timeShiftMillis + "");
+        }
     }
+
+    private void storeUser() {
+        StoreUserRequest storeUserRequest = new StoreUserRequest(activationModel.getNationalId(), activationModel.getSerialNumber(), activationModel.getPhoneNumber(), activationModel.getName(), getUUid());
+        String jsonString = gson.toJson(storeUserRequest);
+        String signature = AuthData.generateHmac(jsonString);
+        Call<StoreUserResponse> storeUserResponseCall = getRetrofit(signature).storeUser(storeUserRequest);
+        storeUserResponseCall.enqueue(new Callback<StoreUserResponse>() {
+            @Override
+            public void onResponse(Call<StoreUserResponse> call, Response<StoreUserResponse> response) {
+                Log.e("** ResponseStore", response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<StoreUserResponse> call, Throwable t) {
+                Log.e("** errorStore", t.getMessage());
+                //                new GenericPopUp(context, t.getMessage()).showCustomPopup();
+            }
+        });
+
+
+    }
+
+    private String getUUid() {
+        String androidId = Settings.Secure.getString(
+                context.getContentResolver(),
+                Settings.Secure.ANDROID_ID
+        );
+        return androidId;
+    }
+
 
     public interface SetResult {
         void showToast(String message);
 
         void showProgress();
 
+        void showLayoutLoading();
+
         void hideProgress();
 
         void showCongratulation();
 
     }
+
+
 }
 
 

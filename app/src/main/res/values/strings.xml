@@ -3,17 +3,17 @@
     <string name="terms_and_conditions">Terms and Conditions</string>
     <string name="terms_and_conditions_text">The customer shall be solely and fully liable for sharing Al Ahly Net/NBE Mobile user ID and passcode with any third party without any liability on the Bank. The customer shall make sure that the mobile phone number and e-mail registered with the Bank are correctly entered.
 
-In case of adding more than one user on the Soft Token, the PIN will be the same for generating an OTP for all users.
+\n \n In case of adding more than one user on the Soft Token, the PIN will be the same for generating an OTP for all users.
 
-The one-time password (OTP) shall be used for different electronic operations/ transactions available on Al Ahly Net/NBE Mobile including transfers, Fawry services, mutual fund certificate purchases, edit customer information, add/edit payee or any other operation/transaction that might be introduced or released subsequently in order to secure the electronic operations/transactions. NBE has the right to send an OTP to the mobile phone number linked to the account or to the e-mail, or by any other means.
+\n \n The one-time password (OTP) shall be used for different electronic operations/ transactions available on Al Ahly Net/NBE Mobile including transfers, Fawry services, mutual fund certificate purchases, edit customer information, add/edit payee or any other operation/transaction that might be introduced or released subsequently in order to secure the electronic operations/transactions. NBE has the right to send an OTP to the mobile phone number linked to the account or to the e-mail, or by any other means.
 
-Make sure that the OTP is not disclosed to any third party including NBE staff. The customer shall be fully responsible for any loss arising out of disclosing information without any liability on the part of the Bank.
+\n \nMake sure that the OTP is not disclosed to any third party including NBE staff. The customer shall be fully responsible for any loss arising out of disclosing information without any liability on the part of the Bank.
 
-After ticking for acceptance "Terms and Conditions", the customer shall be deemed fully responsible for any operations/ transactions carried out on Al Ahly Net/NBE Mobile using OTP, and the customer may not object to any operation/ transaction carried out using the service.
+\n \nAfter ticking for acceptance "Terms and Conditions", the customer shall be deemed fully responsible for any operations/ transactions carried out on Al Ahly Net/NBE Mobile using OTP, and the customer may not object to any operation/ transaction carried out using the service.
 
-In case of activating the Soft Token App, the Hard Token will not be deactivated for existing retail customers. If a new customer wishes to activate the Hard Token as well, the customer shall visit the nearest NBE branch to request a new Hard Token.
+\n \nIn case of activating the Soft Token App, the Hard Token will not be deactivated for existing retail customers. If a new customer wishes to activate the Hard Token as well, the customer shall visit the nearest NBE branch to request a new Hard Token.
 
-In case of requesting a new Hard Token, the banking tariffs shall apply.</string>
+\n \nIn case of requesting a new Hard Token, the banking tariffs shall apply.</string>
     <string name="accept_terms_and_conditions">I accept the Terms and Conditions.</string>
     <string name="identity_verification">Verify National ID or passport</string>
     <string name="identity_verification_text">Enter your National ID or passport number to verify your identity.</string>
@@ -25,6 +25,7 @@ In case of requesting a new Hard Token, the banking tariffs shall apply.</string
     <string name="identity_empty">Please enter the National ID or passport number correctly.</string>
     <string name="identity_not_match">"National ID/Passport number" and "Confirm National ID/passport number" fields do not match.</string>
     <string name="identity_not_valid">Identification numbers not valid.</string>
+    <string name="invalid_national_idOrPassport">Invalid National ID or passport number.</string>
     <string name="mobile_number">Mobile number</string>
     <string name="mobile_number_verification">Mobile number verification</string>
     <string name="mobile_number_verification_text">Please enter your registered mobile number with the bank.</string>
@@ -51,6 +52,7 @@ In case of requesting a new Hard Token, the banking tariffs shall apply.</string
     <string name="scan_cancelled">Scan cancelled</string>
     <string name="no_data_decrypt">Sorry no data to decrypt</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="no_internet_connection">Please note that Soft Token activation requires internet connection.</string>
     <string name="error">Error</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -67,7 +69,7 @@ In case of requesting a new Hard Token, the banking tariffs shall apply.</string
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="deleteUserTitle">Delete User</string>
-    <string name="deleteUserMessage">You are trying to delete this user from the Soft Token. Do you want to proceed?</string>
+    <string name="deleteUserMessage">You are trying to delete this user from the Soft Token.\n \n Do you want to proceed?</string>
     <string name="requestPermission">Permission request</string>
     <string name="permissionMessage">This app requires access to your camera to provide personalized services. Please grant permission to continue.</string>
 
@@ -118,6 +120,7 @@ In case of requesting a new Hard Token, the banking tariffs shall apply.</string
     <string name="english">English</string>
 
     <string name="selectUser">Select User</string>
+    <string name="errorUser">Please enter the activation details correctly.</string>
     <string name="serialNumber">Serial number</string>
     <string name="userName">User name</string>
     <string name="enter_your_pin">Enter PIN</string>
@@ -152,6 +155,7 @@ In case of requesting a new Hard Token, the banking tariffs shall apply.</string
     <string name="biometricAuthentication">Biometric Authentication</string>
     <string name="changePasscode">Change PIN</string>
     <string name="resetToken">Online time synchronization</string>
+    <string name="resetTokenText">Click on the button below for online time synchronization.</string>
     <string name="FAQs">FAQs</string>
     <string name="about">About</string>
     <string name="FAQsText">Frequently Asked Questions (FAQs)</string>
@@ -168,6 +172,9 @@ In case of requesting a new Hard Token, the banking tariffs shall apply.</string
     <string name="copiedOtp">OTP copied</string>
     <string name="addToken">Add new user</string>
     <string name="renameUser">Rename user</string>
+    <string name="renameSuccess">It has been renamed</string>
+    <string name="to">to</string>
+    <string name="successfully">Successfully</string>
     <string name="ok">OK</string>
     <string name="manualActivation">App activation</string>
     <string name="manualActivationText">Activate your Soft Token by entering your activation details.</string>
@@ -179,9 +186,11 @@ In case of requesting a new Hard Token, the banking tariffs shall apply.</string
     <string name="activationIdHint">Enter your activation code</string>
     <string name="activationPassword">Activation password</string>
     <string name="activationPasswordHint">Enter your activation password</string>
-    <string name="langType">English</string>
+    <string name="langType">العربية</string>
+    <string name="langTypeAlpha">ع</string>
     <string name="enter_new_pin_repeated">Confirm new PIN</string>
     <string name="pleaseFillAllFields">Please fill all fields</string>
+    <string name="currentPinNotVaild">Current pin isn\'t valid</string>
     <string name="newPinNotMatch">The new PIN and confirm PIN fields do not match.</string>
     <string name="pinChangedSuccessfully">PIN changed successfully</string>
     <string name="oldPinandNewPinError">Old PIN and new PIN cannot be the same.</string>
@@ -190,4 +199,9 @@ In case of requesting a new Hard Token, the banking tariffs shall apply.</string
     <string name="errorName">Please enter the activation details/scan QR of the user</string>
     <string name="maunalActiovationButton">Enter activation details for Soft Token activation</string>
     <string name="renameTitle">What would you like to rename the user:</string>
+    <string name="invalid_pin">Invalid PIN</string>
+    <string name="gotoSettings">Go to settings</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="permission_required_message">these permission are essential for the app\'s functionality. Please enable it in the app settings.</string>
+    <string name="error_tryAgain">Something error happened, please try again</string>
 </resources>
